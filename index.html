@@ -3,36 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kusi | El Juego de Mesa Andino</title>
+  <title>Kusi — Juego de Mesa Andino para Niñas y Niños</title>
   
-  <!-- Tipografía amigable y moderna para niños y familias -->
+  <!-- Tipografía: Inter (Sustituto ideal de Hurme Geometric Sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================
-       VARIABLES Y RESET
+       TOKENS — QUIZLET STYLE REFERENCE
     ========================================================== */
     :root {
-      --primary: #449E48;
-      --primary-dark: #2F7533;
-      --primary-light: #E8F5E9;
-      --accent-orange: #E76F51;
-      --accent-yellow: #F4A261;
-      --bg-cream: #FAF7EE;
-      --bg-card: #FFFFFF;
-      --text-dark: #264653;
-      --text-muted: #5C6770;
-      --border-soft: #EADDC9;
-      --shadow-sm: 0 6px 16px rgba(0,0,0,0.06);
-      --shadow-md: 0 12px 28px rgba(0,0,0,0.09);
-      --radius-lg: 24px;
-      --radius-md: 16px;
-      --font-title: 'Fredoka', cursive, sans-serif;
-      --font-body: 'Nunito', sans-serif;
+      /* Colors */
+      --color-iris-bolt: #4255ff;
+      --color-ink-charcoal: #282e3e;
+      --color-deep-indigo: #2e3856;
+      --color-slate-veil: #586380;
+      --color-fog-mist: #939bb4;
+      --color-pure-black: #000000;
+      --color-chalk-canvas: #f6f7fb;
+      --color-paper-white: #ffffff;
+      --color-lilac-wash: #edefff;
+      --color-mist-border: #d9dde8;
+
+      /* Pastels para Category Cards (Decorativo exclusivo) */
+      --pastel-cyan: #dcf2fb;
+      --pastel-magenta: #fde2ed;
+      --pastel-violet: #dbdfff;
+      --pastel-peach: #ffe6d8;
+
+      /* Typography */
+      --font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --text-caption: 12px;
+      --text-body-sm: 14px;
+      --text-body: 16px;
+      --text-subheading: 20px;
+      --text-heading-sm: 24px;
+      --text-heading: 32px;
+      --text-display: 44px;
+
+      /* Spacing (Base 8px) */
+      --spacing-8: 8px;
+      --spacing-16: 16px;
+      --spacing-24: 24px;
+      --spacing-32: 32px;
+      --spacing-40: 40px;
+      --spacing-48: 48px;
+      --spacing-64: 64px;
+      --spacing-80: 80px;
+
+      /* Border Radius Semántico */
+      --radius-controls: 4px;
+      --radius-cards: 8px;
+      --radius-feature-cards: 24px;
+      --radius-pills: 200px;
+
+      /* Shadows */
+      --shadow-sm: rgba(40, 46, 62, 0.1) 0px 2px 4px 0px;
+      --shadow-md: rgba(40, 46, 62, 0.1) 0px 4px 16px 0px;
+      --shadow-subtle: rgba(0, 0, 0, 0.3) 0px 0px 1px 0px inset;
+
+      /* Layout */
+      --page-max-width: 1200px;
     }
 
+    /* Reset & Base */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -40,11 +76,13 @@
     }
 
     body {
-      font-family: var(--font-body);
-      background-color: var(--bg-cream);
-      color: var(--text-dark);
-      line-height: 1.6;
-      overflow-x: hidden;
+      font-family: var(--font-family);
+      background-color: var(--color-chalk-canvas);
+      color: var(--color-ink-charcoal);
+      font-size: var(--text-body);
+      font-weight: 400;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
     a {
@@ -52,878 +90,962 @@
       color: inherit;
     }
 
-    img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-
     .container {
-      width: 90%;
-      max-width: 1180px;
+      width: 92%;
+      max-width: var(--page-max-width);
       margin: 0 auto;
     }
 
     /* ==========================================================
-       NAVBAR
+       COMPONENTES REUTILIZABLES
     ========================================================== */
-    .navbar {
-      position: sticky;
-      top: 0;
-      background: rgba(250, 247, 238, 0.95);
-      backdrop-filter: blur(10px);
-      z-index: 1000;
-      border-bottom: 2px solid var(--border-soft);
-      padding: 0.8rem 0;
+    /* Filled Pill Button */
+    .btn-pill-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-8);
+      background-color: var(--color-iris-bolt);
+      color: var(--color-paper-white);
+      font-weight: 600;
+      font-size: var(--text-body-sm);
+      padding: 10px 24px;
+      border-radius: var(--radius-pills);
+      border: none;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.1s ease;
     }
 
-    .nav-container {
-      display: flex;
-      justify-content: space-between;
+    .btn-pill-primary:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    /* Ghost Text Link */
+    .link-ghost {
+      display: inline-flex;
       align-items: center;
+      gap: 6px;
+      color: var(--color-iris-bolt);
+      font-size: var(--text-body);
+      font-weight: 400;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .link-ghost:hover {
+      text-decoration: underline;
+    }
+
+    /* Ghost Outlined Button */
+    .btn-pill-outlined {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-8);
+      background-color: transparent;
+      border: 1px solid var(--color-iris-bolt);
+      color: var(--color-iris-bolt);
+      border-radius: var(--radius-pills);
+      padding: 10px 24px;
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-pill-outlined:hover {
+      background-color: var(--color-lilac-wash);
+    }
+
+    /* Term / Metadata Badge */
+    .badge-term {
+      display: inline-block;
+      background-color: var(--color-chalk-canvas);
+      color: var(--color-slate-veil);
+      font-size: var(--text-caption);
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: var(--radius-pills);
+    }
+
+    /* ==========================================================
+       NAVBAR (Quizlet Header Pattern)
+    ========================================================== */
+    .top-nav {
+      background-color: var(--color-paper-white);
+      border-bottom: 1px solid var(--color-mist-border);
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-24);
     }
 
     .brand-logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-iris-bolt);
+      letter-spacing: -0.5px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-family: var(--font-title);
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--primary);
+      gap: 6px;
     }
 
-    .brand-logo svg {
-      width: 42px;
-      height: 42px;
-    }
-
-    .nav-menu {
+    .nav-search {
+      background-color: var(--color-chalk-canvas);
+      border-radius: var(--radius-pills);
+      padding: 8px 16px;
       display: flex;
-      list-style: none;
-      gap: 2rem;
       align-items: center;
-      font-weight: 700;
-      font-size: 1.05rem;
+      gap: var(--spacing-8);
+      width: 280px;
     }
 
-    .nav-menu a {
-      transition: color 0.2s ease;
+    .nav-search input {
+      border: none;
+      background: transparent;
+      font-size: var(--text-body-sm);
+      color: var(--color-ink-charcoal);
+      outline: none;
+      width: 100%;
     }
 
-    .nav-menu a:hover {
-      color: var(--accent-orange);
+    .nav-search input::placeholder {
+      color: var(--color-fog-mist);
     }
 
-    .btn-nav {
-      background-color: var(--accent-orange);
-      color: #fff !important;
-      padding: 0.6rem 1.4rem;
-      border-radius: 50px;
-      transition: transform 0.2s, background-color 0.2s !important;
-    }
-
-    .btn-nav:hover {
-      background-color: #d15637;
-      transform: translateY(-2px);
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-16);
     }
 
     /* ==========================================================
-       HERO SECTION
+       HERO & FEATURE CATEGORY CARDS
     ========================================================== */
     .hero {
-      position: relative;
-      background: radial-gradient(circle at 70% 30%, #E3F2DA 0%, #FAF7EE 70%);
-      padding: 5rem 0 4rem;
-      border-bottom: 2px solid var(--border-soft);
+      padding: var(--spacing-64) 0 var(--spacing-48);
+      text-align: center;
     }
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      align-items: center;
-      gap: 3rem;
+    .hero-text-stack {
+      max-width: 780px;
+      margin: 0 auto var(--spacing-48);
     }
 
-    .badge-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background-color: #FFF3CD;
-      color: #856404;
-      font-weight: 800;
-      font-size: 0.9rem;
-      padding: 0.4rem 1rem;
-      border-radius: 50px;
-      margin-bottom: 1.2rem;
-      border: 1px solid #FFEBAA;
+    .hero-eyebrow {
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      color: var(--color-slate-veil);
+      margin-bottom: var(--spacing-8);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .hero-title {
-      font-family: var(--font-title);
-      font-size: 3.5rem;
-      line-height: 1.1;
-      color: var(--primary-dark);
-      margin-bottom: 1.2rem;
+      font-size: var(--text-display);
+      font-weight: 600;
+      color: var(--color-ink-charcoal);
+      line-height: 1.2;
+      margin-bottom: var(--spacing-16);
+      letter-spacing: -0.5px;
     }
 
-    .hero-title span {
-      color: var(--accent-orange);
+    .hero-body {
+      font-size: var(--text-subheading);
+      color: var(--color-deep-indigo);
+      margin-bottom: var(--spacing-24);
+      line-height: 1.4;
     }
 
-    .hero-lead {
-      font-size: 1.25rem;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-    }
-
-    .hero-actions {
+    .hero-cta-group {
       display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .btn {
-      font-family: var(--font-body);
-      font-size: 1.05rem;
-      font-weight: 800;
-      padding: 0.9rem 1.8rem;
-      border-radius: 50px;
-      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      border: none;
+      justify-content: center;
+      gap: var(--spacing-24);
     }
 
-    .btn-primary {
-      background-color: var(--primary);
-      color: #fff;
-      box-shadow: 0 8px 20px rgba(68, 158, 72, 0.35);
-    }
-
-    .btn-primary:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-3px);
-    }
-
-    .btn-secondary {
-      background-color: #fff;
-      color: var(--text-dark);
-      border: 2px solid var(--border-soft);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--accent-orange);
-      color: var(--accent-orange);
-      transform: translateY(-3px);
-    }
-
-    .hero-visual {
-      position: relative;
-    }
-
-    .board-card-mockup {
-      background: #FFFFFF;
-      border-radius: var(--radius-lg);
-      padding: 2.2rem;
-      box-shadow: var(--shadow-md);
-      border: 3px solid var(--border-soft);
-      transform: rotate(-1.5deg);
-      transition: transform 0.3s ease;
-      text-align: center;
-    }
-
-    .board-card-mockup:hover {
-      transform: rotate(0deg) scale(1.02);
-    }
-
-    /* ==========================================================
-       CONTEXTO / HISTORIA
-    ========================================================== */
-    .section {
-      padding: 5rem 0;
-    }
-
-    .story-card {
-      background: #FFFDF8;
-      border: 2px solid #EBE0CD;
-      border-radius: var(--radius-lg);
-      padding: 3.5rem;
-      box-shadow: var(--shadow-sm);
+    /* Feature Category Cards Row (24px radius + pastel fill + 8px white panel) */
+    .feature-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-16);
+      margin-top: var(--spacing-32);
     }
 
-    .section-tag {
-      color: var(--accent-orange);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      font-size: 0.85rem;
-      margin-bottom: 0.5rem;
+    .feature-category-card {
+      border-radius: var(--radius-feature-cards);
+      padding: var(--spacing-16);
+      display: flex;
+      flex-direction: column;
+      text-align: left;
     }
 
-    .section-title {
-      font-family: var(--font-title);
-      font-size: 2.5rem;
-      color: var(--primary-dark);
-      margin-bottom: 1.2rem;
+    .card-cyan { background-color: var(--pastel-cyan); }
+    .card-magenta { background-color: var(--pastel-magenta); }
+    .card-violet { background-color: var(--pastel-violet); }
+    .card-peach { background-color: var(--pastel-peach); }
+
+    .feature-inner-panel {
+      background-color: var(--color-paper-white);
+      border-radius: var(--radius-cards);
+      padding: var(--spacing-16);
+      margin-top: var(--spacing-16);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .feature-card-label {
+      font-size: var(--text-heading-sm);
+      font-weight: 700;
+      color: var(--color-ink-charcoal);
       line-height: 1.2;
     }
 
-    .story-body p {
-      margin-bottom: 1.2rem;
-      color: var(--text-muted);
-      font-size: 1.1rem;
-    }
-
-    .highlight-box {
-      background: var(--primary-light);
-      border-left: 4px solid var(--primary);
-      padding: 1rem 1.4rem;
-      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    .feature-card-sub {
+      font-size: var(--text-caption);
+      color: var(--color-slate-veil);
       font-weight: 600;
-      color: var(--primary-dark);
-      margin-top: 1.5rem;
+    }
+
+    .feature-card-preview-text {
+      font-size: var(--text-body-sm);
+      color: var(--color-deep-indigo);
     }
 
     /* ==========================================================
-       PERSONAJES
+       SECCIÓN 1: PERSONAJES (Flashcard Interactivo)
     ========================================================== */
-    .characters-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
+    .section-spacing {
+      padding: var(--spacing-80) 0;
     }
 
-    .character-card {
-      background: #fff;
-      border-radius: var(--radius-lg);
-      padding: 2.2rem 1.8rem;
-      text-align: center;
-      border: 2px solid var(--border-soft);
-      box-shadow: var(--shadow-sm);
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .character-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--accent-orange);
-    }
-
-    .char-avatar {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 1.5rem;
-      border-radius: 50%;
+    .section-header {
+      margin-bottom: var(--spacing-32);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3.5rem;
-      box-shadow: inset 0 0 0 6px rgba(255,255,255,0.7);
+      justify-content: space-between;
+      align-items: flex-end;
     }
 
-    .avatar-kusi { background: #E8F5E9; }
-    .avatar-atuq { background: #FFE8D6; }
-    .avatar-allpa { background: #EDE7F6; }
-
-    .char-name {
-      font-family: var(--font-title);
-      font-size: 1.6rem;
-      margin-bottom: 0.3rem;
+    .section-heading {
+      font-size: var(--text-heading);
+      font-weight: 600;
+      color: var(--color-ink-charcoal);
+      line-height: 1.25;
     }
 
-    .char-role {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--accent-orange);
-      margin-bottom: 1rem;
+    .section-subtext {
+      font-size: var(--text-body);
+      color: var(--color-slate-veil);
+      margin-top: var(--spacing-8);
     }
 
-    .char-desc {
-      color: var(--text-muted);
-      font-size: 0.98rem;
-    }
-
-    /* ==========================================================
-       REALIDAD AUMENTADA (AR)
-    ========================================================== */
-    .ar-section {
-      background: linear-gradient(135deg, #264653 0%, #1a333d 100%);
-      color: #FFFFFF;
-      border-radius: var(--radius-lg);
-      padding: 4rem 3.5rem;
-      margin: 3rem 0;
-      position: relative;
+    /* Flashcard Interactivo de Personaje */
+    .flashcard-wrapper {
+      background-color: var(--color-paper-white);
+      border: 1px solid var(--color-mist-border);
+      border-radius: var(--radius-cards);
+      box-shadow: var(--shadow-md);
       overflow: hidden;
     }
 
-    .ar-section::before {
-      content: "";
-      position: absolute;
-      top: -50px;
-      right: -50px;
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle, rgba(231,111,81,0.25) 0%, transparent 70%);
-      border-radius: 50%;
+    .character-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--color-mist-border);
+      background-color: var(--color-chalk-canvas);
     }
 
-    .ar-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      align-items: center;
-      gap: 3rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    .ar-title {
-      font-family: var(--font-title);
-      font-size: 2.8rem;
-      line-height: 1.15;
-      color: #FFE6A7;
-      margin-bottom: 1.2rem;
-    }
-
-    .ar-desc {
-      font-size: 1.15rem;
-      color: #E0E7EC;
-      margin-bottom: 2rem;
-    }
-
-    .ar-badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      color: #fff;
-      font-size: 0.85rem;
-      font-weight: 800;
-      padding: 0.4rem 1rem;
-      border-radius: 50px;
-      margin-bottom: 1rem;
-      letter-spacing: 1px;
-    }
-
-    .btn-ar {
-      background-color: var(--accent-orange);
-      color: #fff;
-      font-size: 1.15rem;
-      padding: 1.1rem 2.2rem;
-      box-shadow: 0 10px 25px rgba(231, 111, 81, 0.4);
-      animation: pulse 2.5s infinite;
-    }
-
-    .btn-ar:hover {
-      background-color: #d85d3f;
-      transform: scale(1.04);
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(231, 111, 81, 0.6); }
-      70% { box-shadow: 0 0 0 18px rgba(231, 111, 81, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(231, 111, 81, 0); }
-    }
-
-    .ar-card-preview {
-      background: rgba(255, 255, 255, 0.08);
-      border: 2px dashed rgba(255, 255, 255, 0.3);
-      border-radius: var(--radius-lg);
-      padding: 2.5rem;
-      text-align: center;
-      backdrop-filter: blur(8px);
-    }
-
-    .ar-card-preview svg {
-      margin: 0 auto 1rem;
-      fill: #FFE6A7;
-    }
-
-    /* ==========================================================
-       INSTRUCCIONES & CÓMO JUGAR
-    ========================================================== */
-    .steps-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin: 3.5rem 0 2.5rem;
-    }
-
-    .step-card {
-      background: #FFFFFF;
-      border: 2px solid var(--border-soft);
-      border-radius: var(--radius-lg);
-      padding: 2.2rem;
-      position: relative;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .step-num {
-      width: 48px;
-      height: 48px;
-      background: var(--primary);
-      color: #fff;
-      font-family: var(--font-title);
-      font-size: 1.4rem;
+    .char-tab-btn {
+      flex: 1;
+      padding: 14px var(--spacing-16);
+      border: none;
+      background: transparent;
+      font-family: var(--font-family);
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      color: var(--color-slate-veil);
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
-      margin-bottom: 1.2rem;
-    }
-
-    .step-title {
-      font-family: var(--font-title);
-      font-size: 1.35rem;
-      margin-bottom: 0.6rem;
-      color: var(--text-dark);
-    }
-
-    .instructions-cta-box {
-      background: #FFF8EB;
-      border: 2px solid #F3DFC1;
-      border-radius: var(--radius-lg);
-      padding: 2.5rem;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    /* ==========================================================
-       DESCARGAS DIGITALES (PRINT & PLAY)
-    ========================================================== */
-    .downloads-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-
-    .download-item {
-      background: #FFFFFF;
-      border: 2px solid var(--border-soft);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      text-align: center;
+      gap: var(--spacing-8);
+      border-bottom: 2px solid transparent;
       transition: all 0.2s ease;
     }
 
-    .download-item:hover {
-      border-color: var(--primary);
-      transform: translateY(-4px);
+    .char-tab-btn.active {
+      background-color: var(--color-paper-white);
+      color: var(--color-iris-bolt);
+      border-bottom: 2px solid var(--color-iris-bolt);
     }
 
-    .download-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.8rem;
+    .flashcard-body {
+      padding: var(--spacing-48);
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: var(--spacing-40);
+      align-items: center;
     }
 
-    .download-label {
-      font-family: var(--font-title);
-      font-size: 1.1rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .download-size {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    /* ==========================================================
-       FOOTER
-    ========================================================== */
-    .footer {
-      background-color: #2F3538;
-      color: #E2E8F0;
-      padding: 4rem 0 2rem;
-      margin-top: 6rem;
-    }
-
-    .footer-content {
+    .flashcard-media {
+      background-color: var(--color-chalk-canvas);
+      border: 1px solid var(--color-mist-border);
+      border-radius: var(--radius-cards);
+      height: 240px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
-      gap: 1.5rem;
-    }
-
-    .footer-logo {
-      font-family: var(--font-title);
-      font-size: 2rem;
-      color: #68D391;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 1.8rem;
-      font-size: 0.95rem;
-    }
-
-    .footer-links a:hover {
-      color: #68D391;
-    }
-
-    .footer-partners {
-      display: flex;
-      flex-wrap: wrap;
       justify-content: center;
-      gap: 2rem;
-      align-items: center;
-      padding: 1.5rem 0;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      width: 100%;
-      margin: 1rem 0;
-      color: #A0AEC0;
-      font-weight: 700;
+      font-size: 80px;
+      position: relative;
     }
 
-    .footer-copy {
-      font-size: 0.9rem;
-      color: #A0AEC0;
+    .flashcard-media .audio-chip {
+      position: absolute;
+      bottom: 12px;
+      background-color: var(--color-paper-white);
+      border: 1px solid var(--color-mist-border);
+      padding: 6px 14px;
+      border-radius: var(--radius-pills);
+      font-size: var(--text-caption);
+      color: var(--color-iris-bolt);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .flashcard-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-16);
+    }
+
+    .char-quechua-term {
+      font-size: var(--text-heading);
+      font-weight: 600;
+      color: var(--color-ink-charcoal);
+    }
+
+    .char-pronounce {
+      font-size: var(--text-body-sm);
+      color: var(--color-slate-veil);
+    }
+
+    .char-game-role {
+      font-size: var(--text-body);
+      color: var(--color-deep-indigo);
+      line-height: 1.6;
+    }
+
+    .char-skill-pill {
+      align-self: flex-start;
+      background-color: var(--color-lilac-wash);
+      color: var(--color-iris-bolt);
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: var(--radius-pills);
     }
 
     /* ==========================================================
-       RESPONSIVE
+       SECCIÓN 2: REALIDAD AUMENTADA (Promotional Lilac Panel)
     ========================================================== */
-    @media (max-width: 900px) {
-      .hero-grid, .story-card, .ar-grid {
+    .promo-section-lilac {
+      background-color: var(--color-lilac-wash);
+      padding: var(--spacing-80) 0;
+    }
+
+    .promo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: var(--spacing-64);
+    }
+
+    .promo-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-16);
+    }
+
+    .promo-title {
+      font-size: var(--text-heading);
+      font-weight: 600;
+      color: var(--color-ink-charcoal);
+      line-height: 1.25;
+    }
+
+    .promo-body {
+      font-size: var(--text-body);
+      color: var(--color-deep-indigo);
+      line-height: 1.6;
+    }
+
+    .mockup-ar-window {
+      background-color: var(--color-paper-white);
+      border: 1px solid var(--color-mist-border);
+      border-radius: var(--radius-cards);
+      box-shadow: var(--shadow-md);
+      padding: var(--spacing-24);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-16);
+    }
+
+    .ar-visual-screen {
+      height: 220px;
+      background: linear-gradient(180deg, #f0f3ff 0%, #ffffff 100%);
+      border: 1px dashed var(--color-iris-bolt);
+      border-radius: var(--radius-controls);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-iris-bolt);
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      text-align: center;
+      padding: var(--spacing-16);
+    }
+
+    /* ==========================================================
+       SECCIÓN 3: DESCARGA DIGITAL (Study Set Cards Grid)
+    ========================================================== */
+    .study-sets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-24);
+      margin-top: var(--spacing-32);
+    }
+
+    .study-set-card {
+      background-color: var(--color-paper-white);
+      border: 1px solid var(--color-mist-border);
+      border-radius: var(--radius-cards);
+      padding: var(--spacing-24);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 200px;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .study-set-card:hover {
+      border-color: var(--color-iris-bolt);
+      box-shadow: var(--shadow-md);
+    }
+
+    .study-set-title {
+      font-size: var(--text-body);
+      font-weight: 600;
+      color: var(--color-ink-charcoal);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .study-set-creator {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-8);
+      font-size: var(--text-caption);
+      color: var(--color-slate-veil);
+      margin-top: auto;
+      padding-top: var(--spacing-16);
+      border-top: 1px solid var(--color-chalk-canvas);
+    }
+
+    .creator-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: var(--color-mist-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-ink-charcoal);
+    }
+
+    /* ==========================================================
+       FOOTER (5-Column Quizlet Structure)
+    ========================================================== */
+    .footer {
+      background-color: var(--color-chalk-canvas);
+      border-top: 1px solid var(--color-mist-border);
+      padding: var(--spacing-48) 0 var(--spacing-32);
+      margin-top: var(--spacing-80);
+    }
+
+    .footer-columns {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--spacing-32);
+      margin-bottom: var(--spacing-48);
+    }
+
+    .footer-col-title {
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      color: var(--color-ink-charcoal);
+      margin-bottom: var(--spacing-16);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-8);
+    }
+
+    .footer-links a {
+      font-size: var(--text-body-sm);
+      color: var(--color-slate-veil);
+      transition: color 0.15s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-iris-bolt);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-mist-border);
+      padding-top: var(--spacing-24);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--text-caption);
+      color: var(--color-slate-veil);
+    }
+
+    /* ==========================================================
+       RESPONSIVE DESIGN
+    ========================================================== */
+    @media (max-width: 992px) {
+      .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .promo-grid {
         grid-template-columns: 1fr;
       }
-
-      .steps-container {
-        grid-template-columns: 1fr;
+      .study-sets-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
+      .footer-columns {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
 
+    @media (max-width: 768px) {
+      .nav-search {
+        display: none;
+      }
       .hero-title {
-        font-size: 2.8rem;
+        font-size: var(--text-heading);
       }
-
-      .nav-menu {
-        display: none; /* Simplificado para mantener responsive limpio */
+      .flashcard-body {
+        grid-template-columns: 1fr;
+        padding: var(--spacing-24);
+      }
+      .study-sets-grid {
+        grid-template-columns: 1fr;
+      }
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--spacing-16);
+        text-align: center;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- ================= NAVEGACIÓN ================= -->
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="#" class="brand-logo">
-        <svg viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="24" r="22" fill="#449E48"/>
-          <!-- Ojitos de Kusi -->
-          <circle cx="17" cy="20" r="5" fill="#FFFFFF"/>
-          <circle cx="17" cy="20" r="2.5" fill="#1B4D20"/>
-          <circle cx="31" cy="20" r="5" fill="#FFFFFF"/>
-          <circle cx="31" cy="20" r="2.5" fill="#1B4D20"/>
-          <!-- Sonrisa -->
-          <path d="M16 29C19 33 29 33 32 29" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-        Kusi
-      </a>
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="top-nav">
+    <div class="container nav-inner">
+      <div class="brand-group">
+        <a href="#" class="brand-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="4" fill="#4255ff"/>
+            <path d="M7 12L10.5 15.5L17 9" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          kusi
+        </a>
 
-      <ul class="nav-menu">
-        <li><a href="#historia">El Contexto</a></li>
-        <li><a href="#personajes">Personajes</a></li>
-        <li><a href="#ar-seccion">Realidad Aumentada</a></li>
-        <li><a href="#instrucciones">Instrucciones</a></li>
-        <li><a href="instrucciones.html" target="_blank" class="btn-nav">Jugar Ahora</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- ================= HERO ================= -->
-  <header class="hero">
-    <div class="container hero-grid">
-      <div class="hero-info">
-        <div class="badge-pill">
-          ✨ ¡Un viaje lúdico para preservar nuestras lenguas!
-        </div>
-        <h1 class="hero-title">Aprende, ríe y descubre con <span>Kusi</span></h1>
-        <p class="hero-lead">
-          Un juego de mesa educativo y colaborativo creado para que niñas y niños viajen por los valles andinos explorando la lengua quechua, la naturaleza y la amistad.
-        </p>
-
-        <div class="hero-actions">
-          <a href="#ar-seccion" class="btn btn-primary">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
-            Experiencia AR
-          </a>
-          <a href="instrucciones.html" target="_blank" class="btn btn-secondary">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
-            Ver Instrucciones
-          </a>
+        <!-- Barra de búsqueda pill centrada -->
+        <div class="nav-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#939bb4" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" placeholder="Buscar palabras, tarjetas, reglas...">
         </div>
       </div>
 
-      <div class="hero-visual">
-        <div class="board-card-mockup">
-          <svg viewBox="0 0 380 240" style="width: 100%; border-radius: 12px; background: #EEF8EA;">
-            <!-- Ilustración decorativa tipo camino de juego de mesa -->
-            <path d="M 30 180 Q 90 40 180 120 T 350 70" fill="none" stroke="#D1E7D1" stroke-width="32" stroke-linecap="round"/>
-            <path d="M 30 180 Q 90 40 180 120 T 350 70" fill="none" stroke="#449E48" stroke-width="6" stroke-dasharray="8 8"/>
-            <!-- Casillas -->
-            <circle cx="50" cy="160" r="14" fill="#F4A261"/>
-            <circle cx="110" cy="100" r="14" fill="#E76F51"/>
-            <circle cx="170" cy="115" r="14" fill="#449E48"/>
-            <circle cx="240" cy="140" r="14" fill="#F4A261"/>
-            <circle cx="310" cy="80" r="18" fill="#E76F51"/>
-            <text x="310" y="86" fill="#fff" font-family="Fredoka" font-size="16" text-anchor="middle">★</text>
-          </svg>
-          <p style="margin-top: 1rem; font-family: var(--font-title); font-size: 1.2rem; color: var(--primary-dark);">
-            Tablero interactivo: “Ñan Puriy” (Caminando la senda)
-          </p>
-        </div>
+      <div class="nav-actions">
+        <a href="#personajes" class="link-ghost" style="font-size: var(--text-body-sm);">Personajes</a>
+        <a href="#instrucciones" class="link-ghost" style="font-size: var(--text-body-sm);">Manual</a>
+        <a href="realidad-aumentada.html" target="_blank" class="btn-pill-primary">
+          Activar RA
+        </a>
       </div>
     </div>
   </header>
 
-  <main>
-    <!-- ================= CONTEXTO / HISTORIA ================= -->
-    <section id="historia" class="section">
-      <div class="container">
-        <div class="story-card">
-          <div class="story-body">
-            <span class="section-tag">Origen y Propósito</span>
-            <h2 class="section-title">El poder de jugar en nuestra propia lengua</h2>
-            <p>
-              <strong>Kusi</strong> (que en quechua significa <em>alegre o dichoso</em>) nace como una propuesta comunitaria para revitalizar las lenguas originarias a través de la diversión en familia y las aulas.
-            </p>
-            <p>
-              Inspirado en las tradiciones de los valles interandinos de Bolivia, este juego transforma el aprendizaje del quechua en una aventura colaborativa donde nadie queda atrás: para avanzar, nos ayudamos entre todos.
-            </p>
-            <div class="highlight-box">
-              🌱 Desarrollado de forma abierta para libre descarga y uso en bibliotecas populares y escuelas.
-            </div>
-          </div>
+  <!-- ================= HERO SECTION ================= -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-text-stack">
+        <p class="hero-eyebrow">Juego de mesa educativo bilingüe (6 - 8 años)</p>
+        <h1 class="hero-title">Aprende Quechua jugando con Kusi</h1>
+        <p class="hero-body">
+          Un entorno lúdico donde cada casilla es un nuevo descubrimiento andino: vocabulario ilustrado, pronunciación auténtica y aventuras en realidad aumentada.
+        </p>
 
-          <div style="text-align: center;">
-            <svg viewBox="0 0 280 280" style="max-width: 260px; margin: 0 auto;">
-              <circle cx="140" cy="140" r="130" fill="#FFF1D6"/>
-              <!-- Mascota Zorro Sabio (Atuq) -->
-              <polygon points="60,90 100,50 115,110" fill="#E76F51"/>
-              <polygon points="220,90 180,50 165,110" fill="#E76F51"/>
-              <ellipse cx="140" cy="150" rx="80" ry="70" fill="#F4A261"/>
-              <polygon points="100,160 180,160 140,210" fill="#FFFFFF"/>
-              <circle cx="115" cy="135" r="7" fill="#264653"/>
-              <circle cx="165" cy="135" r="7" fill="#264653"/>
-              <ellipse cx="140" cy="180" rx="10" ry="7" fill="#264653"/>
-            </svg>
-            <p style="font-family: var(--font-title); color: var(--accent-orange); font-size: 1.15rem; margin-top: 10px;">
-              Kusi & Atuq: Guardianes del Saber
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= PERSONAJES ================= -->
-    <section id="personajes" class="section" style="padding-top: 0;">
-      <div class="container">
-        <div style="text-align: center; max-width: 650px; margin: 0 auto;">
-          <span class="section-tag">Nuestros Amigos</span>
-          <h2 class="section-title">Conoce a la pandilla de Kusi</h2>
-          <p style="color: var(--text-muted); font-size: 1.1rem;">
-            Cada personaje acompaña a las y los jugadores con desafíos de adivinanzas, palabras secretas y cantos tradicionales.
-          </p>
-        </div>
-
-        <div class="characters-grid">
-          <!-- Personaje 1 -->
-          <article class="character-card">
-            <div class="char-avatar avatar-kusi">🐸</div>
-            <h3 class="char-name">Kusi la Ranita</h3>
-            <span class="char-role">Guía de las palabras</span>
-            <p class="char-desc">
-              Curiosa y alegre. Le encanta enseñar palabras en quechua sobre colores, alimentos andinos y el cuidado de la laguna.
-            </p>
-          </article>
-
-          <!-- Personaje 2 -->
-          <article class="character-card">
-            <div class="char-avatar avatar-atuq">🦊</div>
-            <h3 class="char-name">Atuq el Zorro</h3>
-            <span class="char-role">Maestro de los acertijos</span>
-            <p class="char-desc">
-              Pícaro pero de gran corazón. Desafía a los equipos con trabalenguas, adivinanzas milenarias y retos de memoria rápida.
-            </p>
-          </article>
-
-          <!-- Personaje 3 -->
-          <article class="character-card">
-            <div class="char-avatar avatar-allpa">🦙</div>
-            <h3 class="char-name">Allpa la Vicuñita</h3>
-            <span class="char-role">Guardiana de la Madre Tierra</span>
-            <p class="char-desc">
-              Sabia y paciente. Enseña el respeto por las montañas (apus), los ríos y el trabajo colectivo o *ayni*.
-            </p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= REALIDAD AUMENTADA (AR) ================= -->
-    <section id="ar-seccion" class="container">
-      <div class="ar-section">
-        <div class="ar-grid">
-          <div>
-            <span class="ar-badge">🚀 NUEVA EXPERIENCIA DIGITAL</span>
-            <h2 class="ar-title">¡Haz que Kusi cobre vida en Realidad Aumentada!</h2>
-            <p class="ar-desc">
-              Apunta la cámara de tu celular a las tarjetas del juego y mira cómo los personajes bailan en 3D sobre la mesa mientras pronuncian correctamente las palabras en quechua.
-            </p>
-            
-            <!-- Botón que manda a la página de AR -->
-            <a href="realidad-aumentada.html" target="_blank" class="btn btn-ar">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m11-14v4m-2-2h4m-2 11v4m-2-2h4M12 9a3 3 0 100 6 3 3 0 000-6z"/></svg>
-              Abrir Visor de Realidad Aumentada
-            </a>
-          </div>
-
-          <div class="ar-card-preview">
-            <svg width="68" height="68" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
-              <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
-              <path d="M12 18h.01"/>
-              <path d="M9 7l3-3 3 3"/>
-            </svg>
-            <h4 style="font-family: var(--font-title); font-size: 1.3rem; margin-bottom: 0.5rem; color: #fff;">Sin instalar nada pesado</h4>
-            <p style="font-size: 0.95rem; color: #cbd5e1;">Funciona directamente desde el navegador de cualquier teléfono o tablet.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= INSTRUCCIONES ================= -->
-    <section id="instrucciones" class="section">
-      <div class="container">
-        <div style="text-align: center; max-width: 650px; margin: 0 auto;">
-          <span class="section-tag">Reglas Claras</span>
-          <h2 class="section-title">¿Cómo jugar a Kusi?</h2>
-          <p style="color: var(--text-muted); font-size: 1.1rem;">
-            Diseñado para grupos de 2 a 6 jugadores, ideal para compartir entre generaciones.
-          </p>
-        </div>
-
-        <div class="steps-container">
-          <div class="step-card">
-            <div class="step-num">1</div>
-            <h3 class="step-title">Lanza el dado y avanza</h3>
-            <p style="color: var(--text-muted);">
-              Recorre las casillas de colores a lo largo del sendero andino hasta llegar al lago sagrado.
-            </p>
-          </div>
-
-          <div class="step-card">
-            <div class="step-num">2</div>
-            <h3 class="step-title">Cumple el reto</h3>
-            <p style="color: var(--text-muted);">
-              Roba una tarjeta según el color: traduce una palabra, actúa como un animal o canta un verso.
-            </p>
-          </div>
-
-          <div class="step-card">
-            <div class="step-num">3</div>
-            <h3 class="step-title">Activa la magia</h3>
-            <p style="color: var(--text-muted);">
-              Usa la cámara en las casillas especiales para desbloquear sorpresas interactivas en 3D.
-            </p>
-          </div>
-        </div>
-
-        <!-- Caja de llamada a las instrucciones completas -->
-        <div class="instructions-cta-box">
-          <h3 style="font-family: var(--font-title); font-size: 1.8rem; color: var(--text-dark);">
-            ¿Quieres conocer todas las variantes y reglas pedagógicas?
-          </h3>
-          <p style="max-width: 600px; color: var(--text-muted);">
-            Contamos con un manual completo con guía de pronunciación, vocabulario bilingüe y dinámicas para docentes.
-          </p>
-          <!-- Botón que manda a la página de instrucciones -->
-          <a href="instrucciones.html" target="_blank" class="btn btn-primary" style="background-color: var(--accent-orange);">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            Ver Manual e Instrucciones Completas
+        <div class="hero-actions hero-cta-group">
+          <a href="#instrucciones" class="btn-pill-primary">Descargar kit imprimible</a>
+          <a href="instrucciones.html" target="_blank" class="link-ghost">
+            Leer reglas completas &rarr;
           </a>
         </div>
       </div>
-    </section>
 
-    <!-- ================= DESCARGA DIGITAL (ESTILO REFERENCIA) ================= -->
-    <section class="section" style="padding-top: 0;">
-      <div class="container">
-        <h2 style="font-family: var(--font-title); font-size: 2rem; color: var(--primary-dark); text-align: center;">
-          Descarga la versión digital para imprimir (Print & Play)
-        </h2>
-        
-        <div class="downloads-grid">
-          <div class="download-item">
-            <div class="download-icon">🗺️</div>
-            <div class="download-label">Tablero</div>
-            <div class="download-size">PDF (A3) - 4.2 MB</div>
+      <!-- Feature Category Cards (Pasteles decorativos a 24px radius con panel interno de 8px) -->
+      <div class="feature-grid">
+        <div class="feature-category-card card-cyan">
+          <span class="feature-card-sub">01 / VOCABULARIO</span>
+          <div class="feature-inner-panel">
+            <h2 class="feature-card-label">Rimay</h2>
+            <p class="feature-card-preview-text">Palabras de uso diario, colores, números y animales del valle.</p>
           </div>
-          <div class="download-item">
-            <div class="download-icon">✂️</div>
-            <div class="download-label">Peones recortables</div>
-            <div class="download-size">PDF (A4) - 2.1 MB</div>
+        </div>
+
+        <div class="feature-category-card card-magenta">
+          <span class="feature-card-sub">02 / TRADICIÓN</span>
+          <div class="feature-inner-panel">
+            <h2 class="feature-card-label">Watuchikuna</h2>
+            <p class="feature-card-preview-text">Adivinanzas y retos cortos adaptados para lectura inicial.</p>
           </div>
-          <div class="download-item">
-            <div class="download-icon">🎴</div>
-            <div class="download-label">Tarjetas de reto</div>
-            <div class="download-size">PDF (A4) - 6.8 MB</div>
+        </div>
+
+        <div class="feature-category-card card-violet">
+          <span class="feature-card-sub">03 / TECNOLOGÍA</span>
+          <div class="feature-inner-panel">
+            <h2 class="feature-card-label">RA 3D</h2>
+            <p class="feature-card-preview-text">Escanea las tarjetas con cualquier teléfono y escucha la voz nativa.</p>
           </div>
-          <div class="download-item">
-            <div class="download-icon">📖</div>
-            <div class="download-label">Guía para el aula</div>
-            <div class="download-size">PDF (A4) - 1.5 MB</div>
+        </div>
+
+        <div class="feature-category-card card-peach">
+          <span class="feature-card-sub">04 / EQUIPO</span>
+          <div class="feature-inner-panel">
+            <h2 class="feature-card-label">Ayni</h2>
+            <p class="feature-card-preview-text">Mecánica cooperativa: avanzamos apoyándonos mutuamente.</p>
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <!-- ================= FOOTER ================= -->
+  <!-- ================= SECCIÓN 1: PERSONAJES (FLASHCARDS) ================= -->
+  <section id="personajes" class="section-spacing">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-heading">Presentación interactiva de personajes</h2>
+          <p class="section-subtext">Selecciona un compañero de juego para descubrir su término en quechua y su rol en la partida.</p>
+        </div>
+      </div>
+
+      <div class="flashcard-wrapper">
+        <!-- Selector de pestañas -->
+        <div class="character-tabs">
+          <button class="char-tab-btn active" onclick="switchChar(0)">
+            🐸 Kusi
+          </button>
+          <button class="char-tab-btn" onclick="switchChar(1)">
+            🦊 Atuq
+          </button>
+          <button class="char-tab-btn" onclick="switchChar(2)">
+            🦙 Allpa
+          </button>
+          <button class="char-tab-btn" onclick="switchChar(3)">
+            🦅 Wayra
+          </button>
+        </div>
+
+        <!-- Cuerpo del Flashcard -->
+        <div class="flashcard-body">
+          <div class="flashcard-media">
+            <span id="char-emoji">🐸</span>
+            <div class="audio-chip" onclick="playAudioSimulation()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+              </svg>
+              <span id="char-audio-btn">Escuchar fonética</span>
+            </div>
+          </div>
+
+          <div class="flashcard-content">
+            <span class="badge-term" id="char-category">PERSONAJE PRINCIPAL · GUÍA</span>
+            <h3 class="char-quechua-term" id="char-name">Kusi (Ranita Alegre)</h3>
+            <p class="char-pronounce" id="char-phonetic">Pronunciación: [Koo-see] · Significado: <em>Dichoso / Feliz</em></p>
+            <p class="char-game-role" id="char-description">
+              Kusi salta de hoja en hoja a lo largo de las acequias andinas. En el tablero, guía las casillas de vocabulario básico y permite a los niños de 6 a 8 años repetir frases cortas de bienvenida.
+            </p>
+            <div class="char-skill-pill" id="char-skill">Habilidad en juego: Doble tirada al acertar colores</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECCIÓN 2: REALIDAD AUMENTADA (LILAC WASH PANEL) ================= -->
+  <section class="promo-section-lilac">
+    <div class="container promo-grid">
+      <div class="promo-content">
+        <span class="badge-term" style="background-color: var(--color-paper-white);">EXPERIENCIA INMERSIVA</span>
+        <h2 class="promo-title">Realidad Aumentada sin fricción técnica</h2>
+        <p class="promo-body">
+          Convierte la mesa del comedor o el pupitre del aula en un escenario tridimensional. Al enfocar las tarjetas del juego, los personajes cobran vida en 3D pronunciando cada término fonéticamente para guiar a los niños en su primera lectura bilingüe.
+        </p>
+
+        <!-- Botón primario píldora -->
+        <a href="realidad-aumentada.html" target="_blank" class="btn-pill-primary">
+          Abrir visor de Realidad Aumentada &rarr;
+        </a>
+      </div>
+
+      <div class="mockup-ar-window">
+        <div class="ar-visual-screen">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4255ff" stroke-width="1.5" style="margin-bottom: 8px;">
+            <path d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+          </svg>
+          Visor WebAR (Sin descargas de tiendas de apps)<br>
+          <span style="font-size: var(--text-caption); color: var(--color-slate-veil); font-weight: 400; margin-top: 4px;">
+            Compatible con Chrome, Safari y navegadores móviles estándar
+          </span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="badge-term">Muestra interactiva</span>
+          <span style="font-size: var(--text-caption); color: var(--color-slate-veil);">Modelos optimizados &lt; 2MB</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECCIÓN 3: DESCARGAS DIGITALES (STUDY SET CARDS) ================= -->
+  <section id="instrucciones" class="section-spacing">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-heading">Instrucciones y material imprimible (Print & Play)</h2>
+          <p class="section-subtext">Todos los recursos están diseñados para ser impresos en formato estándar de casa o escuela.</p>
+        </div>
+        <a href="instrucciones.html" target="_blank" class="btn-pill-outlined">
+          Manual Web Interactivo
+        </a>
+      </div>
+
+      <div class="study-sets-grid">
+        <!-- Card 1 -->
+        <div class="study-set-card">
+          <div>
+            <span class="badge-term">PDF · REGLAMENTO</span>
+            <h3 class="study-set-title" style="margin-top: 10px;">Reglamento simplificado para 6-8 años</h3>
+            <p style="font-size: var(--text-body-sm); color: var(--color-slate-veil);">Guía ilustrada paso a paso con iconos para primeros lectores.</p>
+          </div>
+          <div class="study-set-creator">
+            <div class="creator-avatar">AY</div>
+            <span>Atuq Yachachiq · 4 páginas</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="study-set-card">
+          <div>
+            <span class="badge-term">PDF · TABLERO A3</span>
+            <h3 class="study-set-title" style="margin-top: 10px;">Tablero de juego: Camino del Valle</h3>
+            <p style="font-size: var(--text-body-sm); color: var(--color-slate-veil);">Malla de casillas numeradas con estaciones de descanso y retos.</p>
+          </div>
+          <div class="study-set-creator">
+            <div class="creator-avatar">TS</div>
+            <span>Lab TecnoSocial · Alta resolución</span>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="study-set-card">
+          <div>
+            <span class="badge-term">PDF · TARJETAS</span>
+            <h3 class="study-set-title" style="margin-top: 10px;">36 Tarjetas de vocabulario bilingüe</h3>
+            <p style="font-size: var(--text-body-sm); color: var(--color-slate-veil);">Marcadores listos para recortar y escanear con la cámara.</p>
+          </div>
+          <div class="study-set-creator">
+            <div class="creator-avatar">MA</div>
+            <span>mARTadero · Material recortable</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER (5-COLUMN QUIZLET STYLE) ================= -->
   <footer class="footer">
-    <div class="container footer-content">
-      <div class="footer-logo">
-        <span>🐸</span> Kusi Pukllana
-      </div>
-      
-      <p style="max-width: 500px; font-size: 0.95rem;">
-        Iniciativa comunitaria y abierta dedicada a la creación de materiales lúdicos y literarios bilingües.
-      </p>
+    <div class="container">
+      <div class="footer-columns">
+        <!-- Col 1 -->
+        <div>
+          <h4 class="footer-col-title">Sobre Kusi</h4>
+          <ul class="footer-links">
+            <li><a href="#">Origen del proyecto</a></li>
+            <li><a href="#">Enfoque pedagógico</a></li>
+            <li><a href="#">Comunidades quechuas</a></li>
+            <li><a href="#">Impacto en aulas</a></li>
+          </ul>
+        </div>
 
-      <div class="footer-partners">
-        <span>En coordinación con:</span>
-        <span>• Laboratorio TecnoSocial</span>
-        <span>• Proyecto mARTadero</span>
-        <span>• Red de Bibliotecas Populares</span>
+        <!-- Col 2 -->
+        <div>
+          <h4 class="footer-col-title">Para docentes</h4>
+          <ul class="footer-links">
+            <li><a href="instrucciones.html" target="_blank">Guía didáctica escolar</a></li>
+            <li><a href="#">Actividades de aula</a></li>
+            <li><a href="#">Fichas imprimibles</a></li>
+            <li><a href="#">Evaluación lúdica</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3 -->
+        <div>
+          <h4 class="footer-col-title">Tecnología</h4>
+          <ul class="footer-links">
+            <li><a href="realidad-aumentada.html" target="_blank">Visor WebAR</a></li>
+            <li><a href="#">Compatibilidad móvil</a></li>
+            <li><a href="#">Modelos 3D abiertos</a></li>
+            <li><a href="#">Repositorio de código</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4 -->
+        <div>
+          <h4 class="footer-col-title">Equipo y Creadores</h4>
+          <ul class="footer-links">
+            <li><a href="#">Atuq Yachachiq (Cochabamba)</a></li>
+            <li><a href="#">Lab TecnoSocial</a></li>
+            <li><a href="#">Proyecto mARTadero</a></li>
+            <li><a href="#">Micros para Avanzar</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 5 -->
+        <div>
+          <h4 class="footer-col-title">Idioma</h4>
+          <ul class="footer-links">
+            <li><a href="#" style="color: var(--color-iris-bolt); font-weight: 600;">Español / Runasimi</a></li>
+            <li><a href="#">Licencia CC BY-NC-SA</a></li>
+            <li><a href="#">Privacidad</a></li>
+            <li><a href="#">Contacto</a></li>
+          </ul>
+        </div>
       </div>
 
-      <div class="footer-links">
-        <a href="instrucciones.html" target="_blank">Instrucciones</a>
-        <a href="realidad-aumentada.html" target="_blank">Visor RA</a>
-        <a href="#">Políticas de privacidad</a>
-        <a href="#">Términos y condiciones</a>
+      <div class="footer-bottom">
+        <span>© 2026 Kusi Pukllana. Iniciativa pedagógica abierta para la revitalización lingüística.</span>
+        <span>Desarrollado en Cochabamba, Bolivia</span>
       </div>
-
-      <p class="footer-copy">
-        © 2026 Kusi. Material bajo licencia Creative Commons (CC BY-NC-SA 4.0).
-      </p>
     </div>
   </footer>
 
+  <!-- ================= JAVASCRIPT: INTERACTIVIDAD DE PERSONAJES ================= -->
+  <script>
+    // Datos de los personajes del juego
+    const characters = [
+      {
+        emoji: "🐸",
+        category: "PERSONAJE PRINCIPAL · GUÍA",
+        name: "Kusi (Ranita Alegre)",
+        phonetic: "Pronunciación: [Koo-see] · Significado: Dichoso / Feliz",
+        description: "Kusi salta de hoja en hoja a lo largo de las acequias andinas. En el tablero, guía las casillas de vocabulario básico y permite a los niños de 6 a 8 años repetir frases cortas de bienvenida.",
+        skill: "Habilidad en juego: Doble tirada al acertar colores"
+      },
+      {
+        emoji: "🦊",
+        category: "DESAFÍOS · ADIVINANZAS",
+        name: "Atuq (El Zorro Sabio)",
+        phonetic: "Pronunciación: [Ah-tooq] · Significado: Zorro astuto",
+        description: "Atuq desafía a los jugadores con adivinanzas (watuchis). Su casilla activa retos de mímica y trabalenguas sonoros donde todo el equipo debe colaborar para que nadie se quede atrás.",
+        skill: "Habilidad en juego: Salvar a un compañero atascado"
+      },
+      {
+        emoji: "🦙",
+        category: "NATURALEZA · AYNI",
+        name: "Allpa (La Vicuñita)",
+        phonetic: "Pronunciación: [Ahl-pah] · Significado: Tierra fértil",
+        description: "Allpa protege los pastizales de altura. Enseña a reconocer las palabras vinculadas con las montañas (apus), el agua y las plantas medicinales que cuidan a la comunidad.",
+        skill: "Habilidad en juego: Escudo contra penalizaciones de casillas"
+      },
+      {
+        emoji: "🦅",
+        category: "MOVIMIENTO · VELOCIDAD",
+        name: "Wayra (El Cóndor Mensajero)",
+        phonetic: "Pronunciación: [Why-rah] · Significado: Viento andino",
+        description: "Wayra vuela alto sobre la cordillera llevando mensajes entre pueblos. En el juego, activa las casillas de avance rápido cuando los niños pronuncian correctamente tres palabras seguidas.",
+        skill: "Habilidad en juego: Vuelo directo a la casilla de descanso"
+      }
+    ];
+
+    function switchChar(index) {
+      // Actualizar botones de pestaña
+      const tabs = document.querySelectorAll('.char-tab-btn');
+      tabs.forEach((tab, i) => {
+        tab.classList.toggle('active', i === index);
+      });
+
+      // Actualizar datos del flashcard
+      const char = characters[index];
+      document.getElementById('char-emoji').textContent = char.emoji;
+      document.getElementById('char-category').textContent = char.category;
+      document.getElementById('char-name').textContent = char.name;
+      document.getElementById('char-phonetic').textContent = char.phonetic;
+      document.getElementById('char-description').textContent = char.description;
+      document.getElementById('char-skill').textContent = char.skill;
+    }
+
+    function playAudioSimulation() {
+      const btn = document.getElementById('char-audio-btn');
+      const prevText = btn.textContent;
+      btn.textContent = "¡Reproduciendo...! ♫";
+      setTimeout(() => {
+        btn.textContent = prevText;
+      }, 1400);
+    }
+  </script>
 </body>
 </html>
