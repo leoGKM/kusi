@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/conejo_luminance.png",
+  "metadata": null,
+  "name": "conejo",
+  "resources": {
+    "originalImage": "conejo_original.png",
+    "croppedImage": "conejo_cropped.png",
+    "thumbnailImage": "conejo_thumbnail.png",
+    "luminanceImage": "conejo_luminance.png"
+  },
+  "created": 1792966500085,
+  "updated": 1792966500085
+}
