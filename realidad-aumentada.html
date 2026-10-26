@@ -12,43 +12,58 @@
 
   <script>
     (function() {
-      const getAudio = () => document.querySelector('audio');
+      let cardDetected = false;
 
-      // Desbloquear el contexto de audio del navegador tras el primer toque
-      const unlockAudioContext = () => {
-        const audio = getAudio();
-        if (audio) {
+      // Función para silenciar forzadamente cualquier elemento <audio>
+      const muteAudioElement = (audio) => {
+        if (!cardDetected) {
+          audio.muted = true;
           audio.pause();
           audio.currentTime = 0;
         }
-        document.removeEventListener('touchstart', unlockAudioContext);
-        document.removeEventListener('click', unlockAudioContext);
       };
 
-      document.addEventListener('touchstart', unlockAudioContext, { once: true });
-      document.addEventListener('click', unlockAudioContext, { once: true });
+      // 1. Vigilante del DOM (MutationObserver): Detecta cuando 8th Wall inserta el <audio>
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          mutation.addedNodes.forEach((node) => {
+            if (node.tagName === 'AUDIO') {
+              muteAudioElement(node);
+            } else if (node.querySelectorAll) {
+              node.querySelectorAll('audio').forEach(muteAudioElement);
+            }
+          });
+        });
+      });
 
-      // Reproducir SOLO cuando se detecta la tarjeta
-      const onTargetFound = (evt) => {
-        console.log("Tarjeta leída:", evt);
-        const audio = getAudio();
-        if (audio) {
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true
+      });
+
+      // 2. Evento: Tarjeta detectada -> Desmutear y reproducir
+      const onTargetFound = () => {
+        cardDetected = true;
+        const audios = document.querySelectorAll('audio');
+        audios.forEach((audio) => {
+          audio.muted = false;
           audio.currentTime = 0;
-          audio.play().catch(err => console.log("Audio bloqueado:", err));
-        }
+          audio.play().catch(e => console.log("Audio esperando interacción:", e));
+        });
       };
 
-      // Pausar cuando se pierde la tarjeta
+      // 3. Evento: Tarjeta perdida -> Mutear y pausar
       const onTargetLost = () => {
-        console.log("Tarjeta fuera de vista");
-        const audio = getAudio();
-        if (audio) {
+        cardDetected = false;
+        const audios = document.querySelectorAll('audio');
+        audios.forEach((audio) => {
+          audio.muted = true;
           audio.pause();
           audio.currentTime = 0;
-        }
+        });
       };
 
-      // Listeners de eventos de 8th Wall
+      // Escuchar los eventos del motor de Realidad Aumentada
       window.addEventListener('xr-image-target-found', onTargetFound);
       window.addEventListener('targetfound', onTargetFound);
       window.addEventListener('xr-image-target-lost', onTargetLost);
