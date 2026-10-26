@@ -10,41 +10,16 @@
 <body style="margin:0; padding:0; overflow:hidden;">
   <script src="bundle.js"></script>
 
-  <!-- Controlador de Audio Seguro para RA -->
   <script>
     (function() {
-      let isTargetVisible = false;
-
-      // Helper para obtener el elemento de audio
       const getAudio = () => document.querySelector('audio');
 
-      // 1. Silenciar y pausar cualquier reproducción inicial automática
-      const silenceInitialAudio = () => {
+      // Desbloquear el contexto de audio del navegador tras el primer toque
+      const unlockAudioContext = () => {
         const audio = getAudio();
         if (audio) {
           audio.pause();
           audio.currentTime = 0;
-        }
-      };
-
-      // Vigilar constantemente los primeros segundos para detener el audio de inicio
-      const intervalId = setInterval(() => {
-        if (!isTargetVisible) {
-          silenceInitialAudio();
-        }
-      }, 100);
-
-      // Limpiar el intervalo después de 5 segundos
-      setTimeout(() => clearInterval(intervalId), 5000);
-
-      // 2. Desbloqueo de audio por políticas del navegador (sin reproducir el sonido)
-      const unlockAudioContext = () => {
-        const audio = getAudio();
-        if (audio && !isTargetVisible) {
-          audio.play().then(() => {
-            audio.pause();
-            audio.currentTime = 0;
-          }).catch(() => {});
         }
         document.removeEventListener('touchstart', unlockAudioContext);
         document.removeEventListener('click', unlockAudioContext);
@@ -53,23 +28,19 @@
       document.addEventListener('touchstart', unlockAudioContext, { once: true });
       document.addEventListener('click', unlockAudioContext, { once: true });
 
-      // 3. Reproducir ÚNICAMENTE cuando la tarjeta es detectada
+      // Reproducir SOLO cuando se detecta la tarjeta
       const onTargetFound = (evt) => {
-        console.log("Tarjeta leída correctamente:", evt);
-        isTargetVisible = true;
-        clearInterval(intervalId);
-        
+        console.log("Tarjeta leída:", evt);
         const audio = getAudio();
         if (audio) {
           audio.currentTime = 0;
-          audio.play().catch(err => console.log("Bloqueo de audio:", err));
+          audio.play().catch(err => console.log("Audio bloqueado:", err));
         }
       };
 
-      // 4. Pausar cuando la tarjeta sale de vista
+      // Pausar cuando se pierde la tarjeta
       const onTargetLost = () => {
         console.log("Tarjeta fuera de vista");
-        isTargetVisible = false;
         const audio = getAudio();
         if (audio) {
           audio.pause();
@@ -77,7 +48,7 @@
         }
       };
 
-      // Escuchar eventos de reconocimiento de tarjeta de 8th Wall
+      // Listeners de eventos de 8th Wall
       window.addEventListener('xr-image-target-found', onTargetFound);
       window.addEventListener('targetfound', onTargetFound);
       window.addEventListener('xr-image-target-lost', onTargetLost);
