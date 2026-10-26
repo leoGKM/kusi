@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kusi — Visor de Realidad Aumentada</title>
+  <script crossorigin="anonymous" src="./external/runtime/runtime.js"></script>
+  <script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script>
+</head>
+<body style="margin:0; padding:0; overflow:hidden;">
+  <script src="bundle.js"></script>
+
+  <!-- Controlador de Audio Seguro para RA -->
+  <script>
+    (function() {
+      // 1. Helper para obtener el elemento de audio generado por 8th Wall
+      const getAudio = () => document.querySelector('audio');
+
+      // 2. Desbloqueo de Audio por política de Autoplay de navegadores
+      const unlockAudioContext = () => {
+        const audio = getAudio();
+        if (audio) {
+          audio.play().then(() => {
+            audio.pause();
+            audio.currentTime = 0;
+          }).catch(() => {});
+        }
+        document.removeEventListener('touchstart', unlockAudioContext);
+        document.removeEventListener('click', unlockAudioContext);
+      };
+
+      document.addEventListener('touchstart', unlockAudioContext, { once: true });
+      document.addEventListener('click', unlockAudioContext, { once: true });
+
+      // 3. Evento: Tarjeta detectada por la cámara -> Reproducir audio
+      const onTargetFound = (evt) => {
+        console.log("Tarjeta leída correctamente:", evt);
+        const audio = getAudio();
+        if (audio) {
+          audio.currentTime = 0;
+          audio.play().catch(err => console.log("Bloqueo de audio:", err));
+        }
+      };
+
+      // 4. Evento: Tarjeta sale del encuadre -> Pausar audio
+      const onTargetLost = () => {
+        console.log("Tarjeta fuera de vista");
+        const audio = getAudio();
+        if (audio) {
+          audio.pause();
+        }
+      };
+
+      // Escuchar eventos de la cámara XR de 8th Wall
+      window.addEventListener('xr-image-target-found', onTargetFound);
+      window.addEventListener('targetfound', onTargetFound);
+      window.addEventListener('xr-image-target-lost', onTargetLost);
+      window.addEventListener('targetlost', onTargetLost);
+    })();
+  </script>
+</body>
+</html>
