@@ -13,13 +13,34 @@
   <!-- Controlador de Audio Seguro para RA -->
   <script>
     (function() {
-      // 1. Helper para obtener el elemento de audio generado por 8th Wall
+      let isTargetVisible = false;
+
+      // Helper para obtener el elemento de audio
       const getAudio = () => document.querySelector('audio');
 
-      // 2. Desbloqueo de Audio por política de Autoplay de navegadores
-      const unlockAudioContext = () => {
+      // 1. Silenciar y pausar cualquier reproducción inicial automática
+      const silenceInitialAudio = () => {
         const audio = getAudio();
         if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+      };
+
+      // Vigilar constantemente los primeros segundos para detener el audio de inicio
+      const intervalId = setInterval(() => {
+        if (!isTargetVisible) {
+          silenceInitialAudio();
+        }
+      }, 100);
+
+      // Limpiar el intervalo después de 5 segundos
+      setTimeout(() => clearInterval(intervalId), 5000);
+
+      // 2. Desbloqueo de audio por políticas del navegador (sin reproducir el sonido)
+      const unlockAudioContext = () => {
+        const audio = getAudio();
+        if (audio && !isTargetVisible) {
           audio.play().then(() => {
             audio.pause();
             audio.currentTime = 0;
@@ -32,9 +53,12 @@
       document.addEventListener('touchstart', unlockAudioContext, { once: true });
       document.addEventListener('click', unlockAudioContext, { once: true });
 
-      // 3. Evento: Tarjeta detectada por la cámara -> Reproducir audio
+      // 3. Reproducir ÚNICAMENTE cuando la tarjeta es detectada
       const onTargetFound = (evt) => {
         console.log("Tarjeta leída correctamente:", evt);
+        isTargetVisible = true;
+        clearInterval(intervalId);
+        
         const audio = getAudio();
         if (audio) {
           audio.currentTime = 0;
@@ -42,16 +66,18 @@
         }
       };
 
-      // 4. Evento: Tarjeta sale del encuadre -> Pausar audio
+      // 4. Pausar cuando la tarjeta sale de vista
       const onTargetLost = () => {
         console.log("Tarjeta fuera de vista");
+        isTargetVisible = false;
         const audio = getAudio();
         if (audio) {
           audio.pause();
+          audio.currentTime = 0;
         }
       };
 
-      // Escuchar eventos de la cámara XR de 8th Wall
+      // Escuchar eventos de reconocimiento de tarjeta de 8th Wall
       window.addEventListener('xr-image-target-found', onTargetFound);
       window.addEventListener('targetfound', onTargetFound);
       window.addEventListener('xr-image-target-lost', onTargetLost);
