@@ -2,35 +2,85 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Kusi — Visor de Realidad Aumentada</title>
+  
+  <!-- Runtime de 8th Wall Engine -->
   <script crossorigin="anonymous" src="./external/runtime/runtime.js"></script>
   <script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      font-family: sans-serif;
+    }
+
+    /* Mensaje guía para el usuario sobre la cámara */
+    #ar-overlay {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      background: rgba(40, 46, 62, 0.85);
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+  </style>
 </head>
-<body style="margin:0; padding:0; overflow:hidden;">
+<body>
+
+  <!-- Capa de texto para orientar al usuario -->
+  <div id="ar-overlay">
+    📷 Apunta la cámara a una de las tarjetas de Kusi
+  </div>
+
+  <!-- Carga de la escena compilada de 8th Wall -->
   <script src="bundle.js"></script>
 
   <script>
     (function() {
       let cardDetected = false;
+      const overlayText = document.getElementById('ar-overlay');
 
-      // Función para silenciar forzadamente cualquier elemento <audio>
-      const muteAudioElement = (audio) => {
-        if (!cardDetected) {
+      // Función para pausar y silenciar los audios
+      const silenceAudios = () => {
+        const audios = document.querySelectorAll('audio');
+        audios.forEach((audio) => {
           audio.muted = true;
           audio.pause();
           audio.currentTime = 0;
-        }
+        });
       };
 
-      // 1. Vigilante del DOM (MutationObserver): Detecta cuando 8th Wall inserta el <audio>
+      // Control del MutationObserver para capturar el tag <audio> que inserta 8th Wall
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           mutation.addedNodes.forEach((node) => {
             if (node.tagName === 'AUDIO') {
-              muteAudioElement(node);
+              if (!cardDetected) {
+                node.muted = true;
+                node.pause();
+              }
             } else if (node.querySelectorAll) {
-              node.querySelectorAll('audio').forEach(muteAudioElement);
+              node.querySelectorAll('audio').forEach((audio) => {
+                if (!cardDetected) {
+                  audio.muted = true;
+                  audio.pause();
+                }
+              });
             }
           });
         });
@@ -41,33 +91,50 @@
         subtree: true
       });
 
-      // 2. Evento: Tarjeta detectada -> Desmutear y reproducir
-      const onTargetFound = () => {
+      // Evento: Tarjeta detectada por la cámara
+      const onTargetFound = (detail) => {
         cardDetected = true;
+        if (overlayText) {
+          overlayText.innerText = "✨ ¡Tarjeta detectada!";
+          overlayText.style.background = "rgba(66, 85, 255, 0.9)";
+        }
+
         const audios = document.querySelectorAll('audio');
         audios.forEach((audio) => {
           audio.muted = false;
           audio.currentTime = 0;
-          audio.play().catch(e => console.log("Audio esperando interacción:", e));
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.log("Esperando interacción del usuario para reproducir audio:", error);
+            });
+          }
         });
       };
 
-      // 3. Evento: Tarjeta perdida -> Mutear y pausar
+      // Evento: La tarjeta sale del campo de visión de la cámara
       const onTargetLost = () => {
         cardDetected = false;
-        const audios = document.querySelectorAll('audio');
-        audios.forEach((audio) => {
-          audio.muted = true;
-          audio.pause();
-          audio.currentTime = 0;
-        });
+        if (overlayText) {
+          overlayText.innerText = "📷 Apunta la cámara a una de las tarjetas de Kusi";
+          overlayText.style.background = "rgba(40, 46, 62, 0.85)";
+        }
+        silenceAudios();
       };
 
-      // Escuchar los eventos del motor de Realidad Aumentada
+      // Escuchar eventos globales de 8th Wall (compatible con varios nombres de evento de la librería)
       window.addEventListener('xr-image-target-found', onTargetFound);
       window.addEventListener('targetfound', onTargetFound);
+      window.addEventListener('xrimagefound', onTargetFound);
+
       window.addEventListener('xr-image-target-lost', onTargetLost);
       window.addEventListener('targetlost', onTargetLost);
+      window.addEventListener('xrimagelost', onTargetLost);
+
+      // Silenciar audios al iniciar la página por seguridad
+      window.addEventListener('load', () => {
+        silenceAudios();
+      });
     })();
   </script>
 </body>
