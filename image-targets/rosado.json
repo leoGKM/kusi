@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/rosado_luminance.png",
+  "metadata": null,
+  "name": "rosado",
+  "resources": {
+    "originalImage": "rosado_original.png",
+    "croppedImage": "rosado_cropped.png",
+    "thumbnailImage": "rosado_thumbnail.png",
+    "luminanceImage": "rosado_luminance.png"
+  },
+  "created": 1793110800378,
+  "updated": 1793110800378
+}

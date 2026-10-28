@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/negro_luminance.png",
+  "metadata": null,
+  "name": "negro",
+  "resources": {
+    "originalImage": "negro_original.png",
+    "croppedImage": "negro_cropped.png",
+    "thumbnailImage": "negro_thumbnail.png",
+    "luminanceImage": "negro_luminance.png"
+  },
+  "created": 1793110208259,
+  "updated": 1793110208259
+}

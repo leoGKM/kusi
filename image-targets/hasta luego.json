@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/hasta luego_luminance.png",
+  "metadata": null,
+  "name": "hasta luego",
+  "resources": {
+    "originalImage": "hasta luego_original.png",
+    "croppedImage": "hasta luego_cropped.png",
+    "thumbnailImage": "hasta luego_thumbnail.png",
+    "luminanceImage": "hasta luego_luminance.png"
+  },
+  "created": 1793112947329,
+  "updated": 1793112947329
+}

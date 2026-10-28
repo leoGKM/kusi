@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/plomo o gris_luminance.png",
+  "metadata": null,
+  "name": "plomo o gris",
+  "resources": {
+    "originalImage": "plomo o gris_original.png",
+    "croppedImage": "plomo o gris_cropped.png",
+    "thumbnailImage": "plomo o gris_thumbnail.png",
+    "luminanceImage": "plomo o gris_luminance.png"
+  },
+  "created": 1793110731757,
+  "updated": 1793110731757
+}

@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/hijo_luminance.png",
+  "metadata": null,
+  "name": "hijo",
+  "resources": {
+    "originalImage": "hijo_original.png",
+    "croppedImage": "hijo_cropped.png",
+    "thumbnailImage": "hijo_thumbnail.png",
+    "luminanceImage": "hijo_luminance.png"
+  },
+  "created": 1793111929318,
+  "updated": 1793111929318
+}

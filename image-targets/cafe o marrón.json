@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/cafe o marrón_luminance.png",
+  "metadata": null,
+  "name": "cafe o marrón",
+  "resources": {
+    "originalImage": "cafe o marrón_original.png",
+    "croppedImage": "cafe o marrón_cropped.png",
+    "thumbnailImage": "cafe o marrón_thumbnail.png",
+    "luminanceImage": "cafe o marrón_luminance.png"
+  },
+  "created": 1793110663947,
+  "updated": 1793110663947
+}

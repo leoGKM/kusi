@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/cuchara_luminance.png",
+  "metadata": null,
+  "name": "cuchara",
+  "resources": {
+    "originalImage": "cuchara_original.png",
+    "croppedImage": "cuchara_cropped.png",
+    "thumbnailImage": "cuchara_thumbnail.png",
+    "luminanceImage": "cuchara_luminance.png"
+  },
+  "created": 1793107257880,
+  "updated": 1793107257880
+}

@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/pan_luminance.png",
+  "metadata": null,
+  "name": "pan",
+  "resources": {
+    "originalImage": "pan_original.png",
+    "croppedImage": "pan_cropped.png",
+    "thumbnailImage": "pan_thumbnail.png",
+    "luminanceImage": "pan_luminance.png"
+  },
+  "created": 1792983380980,
+  "updated": 1792983380980
+}

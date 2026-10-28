@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/rojo_luminance.png",
+  "metadata": null,
+  "name": "rojo",
+  "resources": {
+    "originalImage": "rojo_original.png",
+    "croppedImage": "rojo_cropped.png",
+    "thumbnailImage": "rojo_thumbnail.png",
+    "luminanceImage": "rojo_luminance.png"
+  },
+  "created": 1793110969940,
+  "updated": 1793110969940
+}

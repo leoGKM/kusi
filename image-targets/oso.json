@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/oso_luminance.png",
+  "metadata": null,
+  "name": "oso",
+  "resources": {
+    "originalImage": "oso_original.png",
+    "croppedImage": "oso_cropped.png",
+    "thumbnailImage": "oso_thumbnail.png",
+    "luminanceImage": "oso_luminance.png"
+  },
+  "created": 1792974993102,
+  "updated": 1792974993102
+}

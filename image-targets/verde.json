@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/verde_luminance.png",
+  "metadata": null,
+  "name": "verde",
+  "resources": {
+    "originalImage": "verde_original.png",
+    "croppedImage": "verde_cropped.png",
+    "thumbnailImage": "verde_thumbnail.png",
+    "luminanceImage": "verde_luminance.png"
+  },
+  "created": 1793110103421,
+  "updated": 1793110103421
+}

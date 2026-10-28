@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/amarrilo_luminance.png",
+  "metadata": null,
+  "name": "amarrilo",
+  "resources": {
+    "originalImage": "amarrilo_original.png",
+    "croppedImage": "amarrilo_cropped.png",
+    "thumbnailImage": "amarrilo_thumbnail.png",
+    "luminanceImage": "amarrilo_luminance.png"
+  },
+  "created": 1793110004807,
+  "updated": 1793110004807
+}

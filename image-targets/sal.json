@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/sal_luminance.png",
+  "metadata": null,
+  "name": "sal",
+  "resources": {
+    "originalImage": "sal_original.png",
+    "croppedImage": "sal_cropped.png",
+    "thumbnailImage": "sal_thumbnail.png",
+    "luminanceImage": "sal_luminance.png"
+  },
+  "created": 1793108899367,
+  "updated": 1793108899367
+}

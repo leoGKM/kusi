@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/pina_luminance.png",
+  "metadata": null,
+  "name": "pina",
+  "resources": {
+    "originalImage": "pina_original.png",
+    "croppedImage": "pina_cropped.png",
+    "thumbnailImage": "pina_thumbnail.png",
+    "luminanceImage": "pina_luminance.png"
+  },
+  "created": 1793109508666,
+  "updated": 1793109508666
+}

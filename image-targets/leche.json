@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/leche_luminance.png",
+  "metadata": null,
+  "name": "leche",
+  "resources": {
+    "originalImage": "leche_original.png",
+    "croppedImage": "leche_cropped.png",
+    "thumbnailImage": "leche_thumbnail.png",
+    "luminanceImage": "leche_luminance.png"
+  },
+  "created": 1793106553653,
+  "updated": 1793106553653
+}

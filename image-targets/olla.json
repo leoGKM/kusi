@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/olla_luminance.png",
+  "metadata": null,
+  "name": "olla",
+  "resources": {
+    "originalImage": "olla_original.png",
+    "croppedImage": "olla_cropped.png",
+    "thumbnailImage": "olla_thumbnail.png",
+    "luminanceImage": "olla_luminance.png"
+  },
+  "created": 1793109295615,
+  "updated": 1793109295615
+}

@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/buenos dias_luminance.png",
+  "metadata": null,
+  "name": "buenos dias",
+  "resources": {
+    "originalImage": "buenos dias_original.png",
+    "croppedImage": "buenos dias_cropped.png",
+    "thumbnailImage": "buenos dias_thumbnail.png",
+    "luminanceImage": "buenos dias_luminance.png"
+  },
+  "created": 1793112104185,
+  "updated": 1793112104185
+}

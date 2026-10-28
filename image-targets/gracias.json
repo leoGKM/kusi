@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/gracias_luminance.png",
+  "metadata": null,
+  "name": "gracias",
+  "resources": {
+    "originalImage": "gracias_original.png",
+    "croppedImage": "gracias_cropped.png",
+    "thumbnailImage": "gracias_thumbnail.png",
+    "luminanceImage": "gracias_luminance.png"
+  },
+  "created": 1793112383949,
+  "updated": 1793112383949
+}

@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/buenas noches_luminance.png",
+  "metadata": null,
+  "name": "buenas noches",
+  "resources": {
+    "originalImage": "buenas noches_original.png",
+    "croppedImage": "buenas noches_cropped.png",
+    "thumbnailImage": "buenas noches_thumbnail.png",
+    "luminanceImage": "buenas noches_luminance.png"
+  },
+  "created": 1793112881630,
+  "updated": 1793112881630
+}

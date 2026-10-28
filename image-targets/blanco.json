@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/blanco_luminance.png",
+  "metadata": null,
+  "name": "blanco",
+  "resources": {
+    "originalImage": "blanco_original.png",
+    "croppedImage": "blanco_cropped.png",
+    "thumbnailImage": "blanco_thumbnail.png",
+    "luminanceImage": "blanco_luminance.png"
+  },
+  "created": 1793110458806,
+  "updated": 1793110458806
+}

@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/chuno_luminance.png",
+  "metadata": null,
+  "name": "chuno",
+  "resources": {
+    "originalImage": "chuno_original.png",
+    "croppedImage": "chuno_cropped.png",
+    "thumbnailImage": "chuno_thumbnail.png",
+    "luminanceImage": "chuno_luminance.png"
+  },
+  "created": 1793109790968,
+  "updated": 1793109790968
+}

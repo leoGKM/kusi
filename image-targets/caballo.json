@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/caballo_luminance.png",
+  "metadata": null,
+  "name": "caballo",
+  "resources": {
+    "originalImage": "caballo_original.png",
+    "croppedImage": "caballo_cropped.png",
+    "thumbnailImage": "caballo_thumbnail.png",
+    "luminanceImage": "caballo_luminance.png"
+  },
+  "created": 1792983163778,
+  "updated": 1792983163778
+}

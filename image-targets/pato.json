@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/pato_luminance.png",
+  "metadata": null,
+  "name": "pato",
+  "resources": {
+    "originalImage": "pato_original.png",
+    "croppedImage": "pato_cropped.png",
+    "thumbnailImage": "pato_thumbnail.png",
+    "luminanceImage": "pato_luminance.png"
+  },
+  "created": 1792983071039,
+  "updated": 1792983071039
+}

@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/condor_luminance.png",
+  "metadata": null,
+  "name": "condor",
+  "resources": {
+    "originalImage": "condor_original.png",
+    "croppedImage": "condor_cropped.png",
+    "thumbnailImage": "condor_thumbnail.png",
+    "luminanceImage": "condor_luminance.png"
+  },
+  "created": 1792981360414,
+  "updated": 1792981360414
+}

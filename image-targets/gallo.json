@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/gallo_luminance.png",
+  "metadata": null,
+  "name": "gallo",
+  "resources": {
+    "originalImage": "gallo_original.png",
+    "croppedImage": "gallo_cropped.png",
+    "thumbnailImage": "gallo_thumbnail.png",
+    "luminanceImage": "gallo_luminance.png"
+  },
+  "created": 1792979201457,
+  "updated": 1792979201457
+}

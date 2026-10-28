@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/agua_luminance.png",
+  "metadata": null,
+  "name": "agua",
+  "resources": {
+    "originalImage": "agua_original.png",
+    "croppedImage": "agua_cropped.png",
+    "thumbnailImage": "agua_thumbnail.png",
+    "luminanceImage": "agua_luminance.png"
+  },
+  "created": 1793109072349,
+  "updated": 1793109072349
+}

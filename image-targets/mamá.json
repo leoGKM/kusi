@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/mamá_luminance.png",
+  "metadata": null,
+  "name": "mamá",
+  "resources": {
+    "originalImage": "mamá_original.png",
+    "croppedImage": "mamá_cropped.png",
+    "thumbnailImage": "mamá_thumbnail.png",
+    "luminanceImage": "mamá_luminance.png"
+  },
+  "created": 1793112556631,
+  "updated": 1793112556631
+}

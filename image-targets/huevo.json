@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/huevo_luminance.png",
+  "metadata": null,
+  "name": "huevo",
+  "resources": {
+    "originalImage": "huevo_original.png",
+    "croppedImage": "huevo_cropped.png",
+    "thumbnailImage": "huevo_thumbnail.png",
+    "luminanceImage": "huevo_luminance.png"
+  },
+  "created": 1792984447144,
+  "updated": 1792984447144
+}

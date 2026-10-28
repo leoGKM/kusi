@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/gusano_luminance.png",
+  "metadata": null,
+  "name": "gusano",
+  "resources": {
+    "originalImage": "gusano_original.png",
+    "croppedImage": "gusano_cropped.png",
+    "thumbnailImage": "gusano_thumbnail.png",
+    "luminanceImage": "gusano_luminance.png"
+  },
+  "created": 1792982603963,
+  "updated": 1792982603963
+}

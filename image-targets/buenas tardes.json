@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/buenas tardes_luminance.png",
+  "metadata": null,
+  "name": "buenas tardes",
+  "resources": {
+    "originalImage": "buenas tardes_original.png",
+    "croppedImage": "buenas tardes_cropped.png",
+    "thumbnailImage": "buenas tardes_thumbnail.png",
+    "luminanceImage": "buenas tardes_luminance.png"
+  },
+  "created": 1793112181899,
+  "updated": 1793112181899
+}

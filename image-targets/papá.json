@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/papá_luminance.png",
+  "metadata": null,
+  "name": "papá",
+  "resources": {
+    "originalImage": "papá_original.png",
+    "croppedImage": "papá_cropped.png",
+    "thumbnailImage": "papá_thumbnail.png",
+    "luminanceImage": "papá_luminance.png"
+  },
+  "created": 1793112509663,
+  "updated": 1793112509663
+}

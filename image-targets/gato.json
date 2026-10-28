@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/gato_luminance.png",
+  "metadata": null,
+  "name": "gato",
+  "resources": {
+    "originalImage": "gato_original.png",
+    "croppedImage": "gato_cropped.png",
+    "thumbnailImage": "gato_thumbnail.png",
+    "luminanceImage": "gato_luminance.png"
+  },
+  "created": 1792975130782,
+  "updated": 1792975130782
+}

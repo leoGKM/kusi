@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/morado_luminance.png",
+  "metadata": null,
+  "name": "morado",
+  "resources": {
+    "originalImage": "morado_original.png",
+    "croppedImage": "morado_cropped.png",
+    "thumbnailImage": "morado_thumbnail.png",
+    "luminanceImage": "morado_luminance.png"
+  },
+  "created": 1793110573986,
+  "updated": 1793110573986
+}

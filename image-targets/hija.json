@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/hija_luminance.png",
+  "metadata": null,
+  "name": "hija",
+  "resources": {
+    "originalImage": "hija_original.png",
+    "croppedImage": "hija_cropped.png",
+    "thumbnailImage": "hija_thumbnail.png",
+    "luminanceImage": "hija_luminance.png"
+  },
+  "created": 1793112035864,
+  "updated": 1793112035864
+}

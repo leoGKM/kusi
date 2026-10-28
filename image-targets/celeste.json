@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/celeste_luminance.png",
+  "metadata": null,
+  "name": "celeste",
+  "resources": {
+    "originalImage": "celeste_original.png",
+    "croppedImage": "celeste_cropped.png",
+    "thumbnailImage": "celeste_thumbnail.png",
+    "luminanceImage": "celeste_luminance.png"
+  },
+  "created": 1793111174431,
+  "updated": 1793111174431
+}

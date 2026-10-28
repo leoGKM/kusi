@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/carne_luminance.png",
+  "metadata": null,
+  "name": "carne",
+  "resources": {
+    "originalImage": "carne_original.png",
+    "croppedImage": "carne_cropped.png",
+    "thumbnailImage": "carne_thumbnail.png",
+    "luminanceImage": "carne_luminance.png"
+  },
+  "created": 1793108816939,
+  "updated": 1793108816939
+}

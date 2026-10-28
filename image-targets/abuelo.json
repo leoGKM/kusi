@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/abuelo_luminance.png",
+  "metadata": null,
+  "name": "abuelo",
+  "resources": {
+    "originalImage": "abuelo_original.png",
+    "croppedImage": "abuelo_cropped.png",
+    "thumbnailImage": "abuelo_thumbnail.png",
+    "luminanceImage": "abuelo_luminance.png"
+  },
+  "created": 1793113231027,
+  "updated": 1793113231027
+}

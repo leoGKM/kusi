@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/bebé_luminance.png",
+  "metadata": null,
+  "name": "bebé",
+  "resources": {
+    "originalImage": "bebé_original.png",
+    "croppedImage": "bebé_cropped.png",
+    "thumbnailImage": "bebé_thumbnail.png",
+    "luminanceImage": "bebé_luminance.png"
+  },
+  "created": 1793112652598,
+  "updated": 1793112652598
+}

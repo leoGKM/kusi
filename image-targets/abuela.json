@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/abuela_luminance.png",
+  "metadata": null,
+  "name": "abuela",
+  "resources": {
+    "originalImage": "abuela_original.png",
+    "croppedImage": "abuela_cropped.png",
+    "thumbnailImage": "abuela_thumbnail.png",
+    "luminanceImage": "abuela_luminance.png"
+  },
+  "created": 1793113283313,
+  "updated": 1793113283313
+}

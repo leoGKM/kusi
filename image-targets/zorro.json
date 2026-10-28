@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/zorro_luminance.png",
+  "metadata": null,
+  "name": "zorro",
+  "resources": {
+    "originalImage": "zorro_original.png",
+    "croppedImage": "zorro_cropped.png",
+    "thumbnailImage": "zorro_thumbnail.png",
+    "luminanceImage": "zorro_luminance.png"
+  },
+  "created": 1792981252383,
+  "updated": 1792981252383
+}

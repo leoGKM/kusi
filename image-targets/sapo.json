@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/sapo_luminance.png",
+  "metadata": null,
+  "name": "sapo",
+  "resources": {
+    "originalImage": "sapo_original.png",
+    "croppedImage": "sapo_cropped.png",
+    "thumbnailImage": "sapo_thumbnail.png",
+    "luminanceImage": "sapo_luminance.png"
+  },
+  "created": 1792982632048,
+  "updated": 1792982632048
+}

@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/azul_luminance.png",
+  "metadata": null,
+  "name": "azul",
+  "resources": {
+    "originalImage": "azul_original.png",
+    "croppedImage": "azul_cropped.png",
+    "thumbnailImage": "azul_thumbnail.png",
+    "luminanceImage": "azul_luminance.png"
+  },
+  "created": 1793109888681,
+  "updated": 1793109888681
+}

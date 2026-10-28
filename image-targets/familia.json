@@ -1,0 +1,23 @@
+{
+  "type": "PLANAR",
+  "properties": {
+    "top": 17,
+    "left": 0,
+    "width": 829,
+    "height": 1105,
+    "isRotated": false,
+    "originalWidth": 829,
+    "originalHeight": 1140
+  },
+  "imagePath": "image-targets/familia_luminance.png",
+  "metadata": null,
+  "name": "familia",
+  "resources": {
+    "originalImage": "familia_original.png",
+    "croppedImage": "familia_cropped.png",
+    "thumbnailImage": "familia_thumbnail.png",
+    "luminanceImage": "familia_luminance.png"
+  },
+  "created": 1793112714170,
+  "updated": 1793112714170
+}
