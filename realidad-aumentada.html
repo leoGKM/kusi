@@ -1,1 +1,94 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Empty Project</title><meta itemprop="name" content="Empty Project"><meta name="twitter:title" content="Empty Project"><meta property="og:title" content="Empty Project"><meta property="og:site_name" content="Empty Project"><meta name="description" content="Start with a blank project."><meta itemprop="description" content="Start with a blank project."><meta property="og:description" content="Start with a blank project."><meta name="twitter:description" content="Start with a blank project."><script crossorigin="anonymous" src="./external/runtime/runtime.js"></script><script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script></head><body><script src="bundle.js"></script></body></html>
+<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Empty Project</title><meta itemprop="name" content="Empty Project"><meta name="twitter:title" content="Empty Project"><meta property="og:title" content="Empty Project"><meta property="og:site_name" content="Empty Project"><meta name="description" content="Start with a blank project."><meta itemprop="description" content="Start with a blank project."><meta property="og:description" content="Start with a blank project."><meta name="twitter:description" content="Start with a blank project."><script crossorigin="anonymous" src="./external/runtime/runtime.js"></script><script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script></head><body><script src="bundle.js"></script></body></html><!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Kusi — Visor RA</title>
+
+  <!-- Bloqueo previo de WebAudio para evitar reproducciones accidentales -->
+  <script>
+    (function() {
+      window.__arAudioContexts = [];
+      const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
+      if (NativeAudioContext) {
+        function OverriddenAudioContext(...args) {
+          const ctx = new NativeAudioContext(...args);
+          window.__arAudioContexts.push(ctx);
+          if (ctx.state === 'running') ctx.suspend().catch(() => {});
+          return ctx;
+        }
+        OverriddenAudioContext.prototype = NativeAudioContext.prototype;
+        window.AudioContext = OverriddenAudioContext;
+        if (window.webkitAudioContext) window.webkitAudioContext = OverriddenAudioContext;
+      }
+    })();
+  </script>
+  
+  <script crossorigin="anonymous" src="./external/runtime/runtime.js"></script>
+  <script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script>
+
+  <style>
+    body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
+    #ar-overlay {
+      position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10;
+      background: rgba(40, 46, 62, 0.85); color: #fff; padding: 12px 24px; border-radius: 50px;
+      font-size: 14px; font-weight: bold; text-align: center; pointer-events: none; border: 1px solid rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="ar-overlay">📷 Apunta la cámara a una de las tarjetas de Kusi</div>
+
+  <script src="./bundle.js"></script>
+
+  <script>
+    (function() {
+      let isTargetVisible = false;
+      const overlayText = document.getElementById('ar-overlay');
+
+      const muteAll = () => {
+        if (window.__arAudioContexts) {
+          window.__arAudioContexts.forEach(ctx => { if (ctx.state === 'running') ctx.suspend().catch(() => {}); });
+        }
+        document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; a.muted = true; });
+      };
+
+      const unmuteAll = () => {
+        if (window.__arAudioContexts) {
+          window.__arAudioContexts.forEach(ctx => { if (ctx.state === 'suspended') ctx.resume().catch(() => {}); });
+        }
+        document.querySelectorAll('audio').forEach(a => { a.muted = false; a.currentTime = 0; a.play().catch(() => {}); });
+      };
+
+      const monitor = () => {
+        if (!isTargetVisible) muteAll();
+        requestAnimationFrame(monitor);
+      };
+      requestAnimationFrame(monitor);
+
+      const onTargetFound = (e) => {
+        isTargetVisible = true;
+        const name = (e.detail && e.detail.name) ? e.detail.name : '';
+        if (overlayText) {
+          overlayText.innerText = name ? `✨ ¡Tarjeta ${name} detectada!` : "✨ ¡Tarjeta detectada!";
+          overlayText.style.background = "rgba(46, 125, 50, 0.9)";
+        }
+        unmuteAll();
+      };
+
+      const onTargetLost = () => {
+        isTargetVisible = false;
+        if (overlayText) {
+          overlayText.innerText = "📷 Apunta la cámara a una de las tarjetas de Kusi";
+          overlayText.style.background = "rgba(40, 46, 62, 0.85)";
+        }
+        muteAll();
+      };
+
+      ['xr-image-target-found', 'targetfound', 'xrimagefound'].forEach(evt => window.addEventListener(evt, onTargetFound));
+      ['xr-image-target-lost', 'targetlost', 'xrimagelost'].forEach(evt => window.addEventListener(evt, onTargetLost));
+    })();
+  </script>
+</body>
+</html>
