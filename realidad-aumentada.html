@@ -1,11 +1,11 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Empty Project</title><meta itemprop="name" content="Empty Project"><meta name="twitter:title" content="Empty Project"><meta property="og:title" content="Empty Project"><meta property="og:site_name" content="Empty Project"><meta name="description" content="Start with a blank project."><meta itemprop="description" content="Start with a blank project."><meta property="og:description" content="Start with a blank project."><meta name="twitter:description" content="Start with a blank project."><script crossorigin="anonymous" src="./external/runtime/runtime.js"></script><script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script></head><body><script src="bundle.js"></script></body></html><!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Kusi — Visor RA</title>
 
-  <!-- Bloqueo previo de WebAudio para evitar reproducciones accidentales -->
+  <!-- 1. Intercepción preventiva de audio -->
   <script>
     (function() {
       window.__arAudioContexts = [];
@@ -23,9 +23,10 @@
       }
     })();
   </script>
-  
+
+  <!-- 2. Runtimes esenciales en orden exacto -->
   <script crossorigin="anonymous" src="./external/runtime/runtime.js"></script>
-  <script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script>
+  <script crossorigin="anonymous" src="./external/xr/xr.js"></script>
 
   <style>
     body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
@@ -40,8 +41,10 @@
 
   <div id="ar-overlay">📷 Apunta la cámara a una de las tarjetas de Kusi</div>
 
+  <!-- 3. Carga de la escena/bundle compilado -->
   <script src="./bundle.js"></script>
 
+  <!-- 4. Lógica de control de eventos y arranque seguro de XR8 -->
   <script>
     (function() {
       let isTargetVisible = false;
@@ -61,12 +64,14 @@
         document.querySelectorAll('audio').forEach(a => { a.muted = false; a.currentTime = 0; a.play().catch(() => {}); });
       };
 
+      // Monitorear silencio cuando no hay tarjeta activa
       const monitor = () => {
         if (!isTargetVisible) muteAll();
         requestAnimationFrame(monitor);
       };
       requestAnimationFrame(monitor);
 
+      // Manejadores de eventos de tarjetas
       const onTargetFound = (e) => {
         isTargetVisible = true;
         const name = (e.detail && e.detail.name) ? e.detail.name : '';
@@ -86,8 +91,20 @@
         muteAll();
       };
 
-      ['xr-image-target-found', 'targetfound', 'xrimagefound'].forEach(evt => window.addEventListener(evt, onTargetFound));
-      ['xr-image-target-lost', 'targetlost', 'xrimagelost'].forEach(evt => window.addEventListener(evt, onTargetLost));
+      ['xr-image-target-found', 'targetfound', 'xrimagefound', 'xr:xrimagefound'].forEach(evt => window.addEventListener(evt, onTargetFound));
+      ['xr-image-target-lost', 'targetlost', 'xrimagelost', 'xr:xrimagelost'].forEach(evt => window.addEventListener(evt, onTargetLost));
+
+      // Asegurar inicialización cuando el pipeline XR8 esté listo
+      const startXR = () => {
+        if (window.XR8) {
+          window.XR8.addCameraPipelineModules([
+            window.XR8.GlTextureRenderer ? window.XR8.GlTextureRenderer.pipelineModule() : null,
+            window.XR8.TwoD ? window.XR8.TwoD.pipelineModule() : null,
+          ].filter(Boolean));
+        }
+      };
+
+      window.addEventListener('xrloaded', startXR);
     })();
   </script>
 </body>
