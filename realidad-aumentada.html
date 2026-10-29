@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Kusi — Visor RA</title>
 
-  <!-- 1. Intercepción preventiva de audio -->
+  <!-- 1. Intercepción preventiva de audio (para que no suenen solos al inicio) -->
   <script>
     (function() {
       window.__arAudioContexts = [];
@@ -24,16 +24,36 @@
     })();
   </script>
 
-  <!-- 2. Runtimes esenciales en orden exacto -->
+  <!-- 2. Runtimes originales de 8th Wall con sus atributos requeridos -->
   <script crossorigin="anonymous" src="./external/runtime/runtime.js"></script>
-  <script crossorigin="anonymous" src="./external/xr/xr.js"></script>
+  <script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script>
 
   <style>
-    body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
+    body, html { 
+      margin: 0; 
+      padding: 0; 
+      width: 100%; 
+      height: 100%; 
+      overflow: hidden; 
+      background: #000; 
+      font-family: system-ui, -apple-system, sans-serif; 
+    }
     #ar-overlay {
-      position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10;
-      background: rgba(40, 46, 62, 0.85); color: #fff; padding: 12px 24px; border-radius: 50px;
-      font-size: 14px; font-weight: bold; text-align: center; pointer-events: none; border: 1px solid rgba(255,255,255,0.2);
+      position: absolute; 
+      top: 20px; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      z-index: 10;
+      background: rgba(40, 46, 62, 0.85); 
+      color: #fff; 
+      padding: 12px 24px; 
+      border-radius: 50px;
+      font-size: 14px; 
+      font-weight: 600; 
+      text-align: center; 
+      pointer-events: none; 
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
     }
   </style>
 </head>
@@ -41,10 +61,10 @@
 
   <div id="ar-overlay">📷 Apunta la cámara a una de las tarjetas de Kusi</div>
 
-  <!-- 3. Carga de la escena/bundle compilado -->
+  <!-- 3. Carga del bundle de 8th Wall -->
   <script src="./bundle.js"></script>
 
-  <!-- 4. Lógica de control de eventos y arranque seguro de XR8 -->
+  <!-- 4. Lógica de silencio/activación por detección de tarjeta -->
   <script>
     (function() {
       let isTargetVisible = false;
@@ -64,14 +84,14 @@
         document.querySelectorAll('audio').forEach(a => { a.muted = false; a.currentTime = 0; a.play().catch(() => {}); });
       };
 
-      // Monitorear silencio cuando no hay tarjeta activa
+      // Bucle continuo para mantener silenciados los audios cuando no hay tarjeta
       const monitor = () => {
         if (!isTargetVisible) muteAll();
         requestAnimationFrame(monitor);
       };
       requestAnimationFrame(monitor);
 
-      // Manejadores de eventos de tarjetas
+      // Manejadores de eventos de las tarjetas
       const onTargetFound = (e) => {
         isTargetVisible = true;
         const name = (e.detail && e.detail.name) ? e.detail.name : '';
@@ -91,20 +111,11 @@
         muteAll();
       };
 
-      ['xr-image-target-found', 'targetfound', 'xrimagefound', 'xr:xrimagefound'].forEach(evt => window.addEventListener(evt, onTargetFound));
-      ['xr-image-target-lost', 'targetlost', 'xrimagelost', 'xr:xrimagelost'].forEach(evt => window.addEventListener(evt, onTargetLost));
+      const eventsFound = ['xr-image-target-found', 'targetfound', 'xrimagefound', 'xr:xrimagefound'];
+      const eventsLost = ['xr-image-target-lost', 'targetlost', 'xrimagelost', 'xr:xrimagelost'];
 
-      // Asegurar inicialización cuando el pipeline XR8 esté listo
-      const startXR = () => {
-        if (window.XR8) {
-          window.XR8.addCameraPipelineModules([
-            window.XR8.GlTextureRenderer ? window.XR8.GlTextureRenderer.pipelineModule() : null,
-            window.XR8.TwoD ? window.XR8.TwoD.pipelineModule() : null,
-          ].filter(Boolean));
-        }
-      };
-
-      window.addEventListener('xrloaded', startXR);
+      eventsFound.forEach(evt => window.addEventListener(evt, onTargetFound));
+      eventsLost.forEach(evt => window.addEventListener(evt, onTargetLost));
     })();
   </script>
 </body>
