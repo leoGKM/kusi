@@ -357,6 +357,52 @@
 
         log("XR8 LISTO: cargando bundle.js");
 
+        
+        // Diagnóstico del pipeline antes de XR8.run()
+        if (!window.__kusiPipelinePreRun) {
+        window.__kusiPipelinePreRun = true;
+
+        let frames = 0;
+        let lastReport = 0;
+
+        XR8.addCameraPipelineModule({
+            name: "kusi-pipeline-pre-run",
+
+            onStart: () => {
+            log("PIPELINE: onStart recibido");
+            },
+
+            onUpdate: ({ processCpuResult } = {}) => {
+            frames++;
+
+            const now = performance.now();
+
+            if (now - lastReport >= 5000) {
+                log(
+                "PIPELINE: " + frames +
+                " actualizaciones"
+                );
+
+                log(
+                "CPU: " +
+                Object.keys(processCpuResult || {}).join(", ")
+                );
+
+                lastReport = now;
+            }
+            },
+
+            onException: error => {
+            log(
+                "PIPELINE ERROR: " +
+                (error?.message || error)
+            );
+            }
+        });
+
+        log("PIPELINE: módulo registrado antes de XR8.run");
+        }
+
         observe(
           window.XR8,
           "run",
