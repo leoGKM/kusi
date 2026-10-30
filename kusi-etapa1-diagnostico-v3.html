@@ -1,0 +1,474 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <title>Kusi - Diagnóstico XR V3</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: black;
+      font-family: system-ui, sans-serif;
+    }
+
+    #ar-overlay {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: max-content;
+      max-width: 80%;
+      padding: 14px 20px;
+      border-radius: 25px;
+      background: rgba(40,46,62,.9);
+      color: white;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    #diagnostic {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 99999;
+      background: rgba(0,0,0,.9);
+      color: #9effb3;
+      border: 1px solid #555;
+      border-radius: 10px;
+      padding: 12px;
+      max-height: 38vh;
+      overflow-y: auto;
+      font: 12px/1.5 monospace;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+  </style>
+
+  <!-- Mantener audio bloqueado al inicio -->
+  <script>
+    (() => {
+      window.__kusiContexts = [];
+
+      const NativeContext =
+        window.AudioContext || window.webkitAudioContext;
+
+      if (NativeContext) {
+        function SafeAudioContext(...args) {
+          const ctx = new NativeContext(...args);
+          window.__kusiContexts.push(ctx);
+
+          if (ctx.state === "running") {
+            ctx.suspend().catch(() => {});
+          }
+
+          return ctx;
+        }
+
+        SafeAudioContext.prototype =
+          NativeContext.prototype;
+
+        window.AudioContext = SafeAudioContext;
+
+        if (window.webkitAudioContext) {
+          window.webkitAudioContext = SafeAudioContext;
+        }
+      }
+
+      // Bloquear reproducciones HTMLAudio automáticas.
+      const nativePlay = HTMLMediaElement.prototype.play;
+
+      HTMLMediaElement.prototype.play = function() {
+        if (!window.__kusiTargetVisible) {
+          this.pause();
+          this.muted = true;
+          return Promise.resolve();
+        }
+
+        return nativePlay.call(this);
+      };
+
+      window.__kusiTargetVisible = false;
+    })();
+  </script>
+
+  <!-- Dependencias originales -->
+  <script
+    crossorigin="anonymous"
+    src="./external/runtime/runtime.js">
+  </script>
+
+  <script
+    crossorigin="anonymous"
+    src="./external/xr/xr.js"
+    data-preload-chunks="face, slam">
+  </script>
+</head>
+
+<body>
+
+  <div id="ar-overlay">
+    📷 Apunta la cámara a una de las tarjetas de Kusi
+  </div>
+
+  <div id="diagnostic">
+    Preparando diagnóstico V3...
+  </div>
+
+  <script>
+    (() => {
+      const panel =
+        document.getElementById("diagnostic");
+
+      const overlay =
+        document.getElementById("ar-overlay");
+
+      const logs = [];
+
+      function log(message) {
+        const seconds =
+          (performance.now() / 1000).toFixed(1);
+
+        const line =
+          "[" + seconds + "s] " + message;
+
+        logs.push(line);
+
+        panel.textContent =
+          logs.slice(-35).join("\n");
+
+        panel.scrollTop = panel.scrollHeight;
+
+        console.info("[KUSI V3]", message);
+      }
+
+      function describe(value) {
+        try {
+          return JSON.stringify(
+            value,
+            (key, val) => {
+              if (
+                key === "imageTargetData" &&
+                Array.isArray(val)
+              ) {
+                return "[targets: " +
+                  val.length + "]";
+              }
+
+              if (typeof val === "function") {
+                return "[function]";
+              }
+
+              return val;
+            }
+          )?.slice(0, 450) ?? String(value);
+        } catch {
+          return "[No serializable]";
+        }
+      }
+
+      function observe(obj, method, label) {
+        if (
+          !obj ||
+          typeof obj[method] !== "function"
+        ) {
+          log("NO DISPONIBLE: " + label);
+          return;
+        }
+
+        const original = obj[method];
+
+        try {
+          obj[method] = function(...args) {
+            log(
+              "LLAMADA " + label +
+              " " + describe(args[0])
+            );
+
+            try {
+              const result =
+                original.apply(this, args);
+
+              if (
+                result &&
+                typeof result.catch === "function"
+              ) {
+                result.catch(error => {
+                  log(
+                    "RECHAZO " + label +
+                    ": " +
+                    (error?.message || error)
+                  );
+                });
+              }
+
+              return result;
+
+            } catch (error) {
+              log(
+                "ERROR " + label +
+                ": " +
+                (error?.message || error)
+              );
+
+              throw error;
+            }
+          };
+
+          log("OBSERVANDO: " + label);
+
+        } catch (error) {
+          log(
+            "NO SE PUDO OBSERVAR " +
+            label + ": " + error.message
+          );
+        }
+      }
+
+      // Registrar errores globales.
+      window.addEventListener(
+        "error",
+        event => {
+          log(
+            "ERROR GLOBAL: " +
+            (event.message ||
+             event.target?.src ||
+             "desconocido")
+          );
+        },
+        true
+      );
+
+      window.addEventListener(
+        "unhandledrejection",
+        event => {
+          log(
+            "PROMESA: " +
+            (event.reason?.message ||
+             String(event.reason))
+          );
+        }
+      );
+
+      // Registrar errores reportados por el motor.
+      const nativeConsoleError = console.error;
+
+      console.error = function(...args) {
+        log(
+          "CONSOLA ERROR: " +
+          args.map(x => x?.message || String(x))
+              .join(" ")
+              .slice(0, 300)
+        );
+
+        return nativeConsoleError.apply(
+          console,
+          args
+        );
+      };
+
+      const foundEvents = [
+        "xr-image-target-found",
+        "targetfound",
+        "xrimagefound",
+        "xr:xrimagefound"
+      ];
+
+      const lostEvents = [
+        "xr-image-target-lost",
+        "targetlost",
+        "xrimagelost",
+        "xr:xrimagelost"
+      ];
+
+      foundEvents.forEach(eventName => {
+        window.addEventListener(
+          eventName,
+          event => {
+            window.__kusiTargetVisible = true;
+
+            const name =
+              event.detail?.name || "";
+
+            log(
+              "TARJETA DETECTADA: " +
+              eventName + " " + name
+            );
+
+            overlay.textContent =
+              name
+                ? "✨ ¡Tarjeta " + name +
+                  " detectada!"
+                : "✨ ¡Tarjeta detectada!";
+
+            overlay.style.background =
+              "rgba(46,125,50,.9)";
+          }
+        );
+      });
+
+      lostEvents.forEach(eventName => {
+        window.addEventListener(
+          eventName,
+          () => {
+            window.__kusiTargetVisible = false;
+
+            log("TARJETA PERDIDA: " + eventName);
+
+            overlay.textContent =
+              "📷 Apunta la cámara a una de las tarjetas de Kusi";
+
+            overlay.style.background =
+              "rgba(40,46,62,.9)";
+
+            window.__kusiContexts.forEach(ctx => {
+              if (ctx.state === "running") {
+                ctx.suspend().catch(() => {});
+              }
+            });
+
+            document.querySelectorAll("audio")
+              .forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.muted = true;
+              });
+          }
+        );
+      });
+
+      // Cargar la escena solo después de XR8.
+      let bundleStarted = false;
+
+      function loadBundle() {
+        if (bundleStarted) return;
+
+        bundleStarted = true;
+
+        log("XR8 LISTO: cargando bundle.js");
+
+        observe(
+          window.XR8,
+          "run",
+          "XR8.run"
+        );
+
+        observe(
+          window.XR8,
+          "reconfigureSession",
+          "XR8.reconfigureSession"
+        );
+
+        observe(
+          window.XR8.XrController,
+          "configure",
+          "XR8.XrController.configure"
+        );
+
+        const script =
+          document.createElement("script");
+
+        script.src = "./bundle.js";
+
+        script.onload = () => {
+          log("bundle.js CARGADO");
+
+          log(
+            "ESTADO FINAL XR8.run=" +
+            typeof window.XR8?.run
+          );
+        };
+
+        script.onerror = () => {
+          log("ERROR CARGANDO bundle.js");
+        };
+
+        document.body.appendChild(script);
+      }
+
+      log(
+        "HTTPS=" + window.isSecureContext
+      );
+
+      log(
+        "CAMARA API=" +
+        !!navigator.mediaDevices?.getUserMedia
+      );
+
+      log(
+        "ECS=" + typeof window.ecs
+      );
+
+      log("Esperando inicialización de XR8...");
+
+      const startedAt = performance.now();
+      const timeoutMs = 60000;
+
+      const interval = setInterval(() => {
+        const elapsed =
+          performance.now() - startedAt;
+
+        const xrReady =
+          typeof window.XR8?.run === "function" &&
+          typeof window.XR8?.XrController
+            ?.configure === "function";
+
+        if (xrReady) {
+          clearInterval(interval);
+
+          log(
+            "XR8 DISPONIBLE después de " +
+            (elapsed / 1000).toFixed(1) +
+            " segundos"
+          );
+
+          loadBundle();
+          return;
+        }
+
+        if (elapsed >= timeoutMs) {
+          clearInterval(interval);
+
+          log(
+            "TIMEOUT: XR8 no estuvo listo " +
+            "después de 60 segundos"
+          );
+
+          return;
+        }
+
+      }, 500);
+
+      setTimeout(() => {
+        log(
+          "ESTADO 30s: XR8=" +
+          typeof window.XR8 +
+          " run=" +
+          typeof window.XR8?.run
+        );
+      }, 30000);
+
+      setTimeout(() => {
+        log(
+          "ESTADO 60s: XR8=" +
+          typeof window.XR8 +
+          " run=" +
+          typeof window.XR8?.run
+        );
+      }, 60000);
+
+    })();
+  </script>
+
+</body>
+</html>
