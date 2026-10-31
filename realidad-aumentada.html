@@ -1,122 +1,404 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Kusi — Visor RA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Kusi · Granja</title>
 
-  <!-- 1. Intercepción preventiva de audio (para que no suenen solos al inicio) -->
-  <script>
-    (function() {
-      window.__arAudioContexts = [];
-      const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
-      if (NativeAudioContext) {
-        function OverriddenAudioContext(...args) {
-          const ctx = new NativeAudioContext(...args);
-          window.__arAudioContexts.push(ctx);
-          if (ctx.state === 'running') ctx.suspend().catch(() => {});
-          return ctx;
-        }
-        OverriddenAudioContext.prototype = NativeAudioContext.prototype;
-        window.AudioContext = OverriddenAudioContext;
-        if (window.webkitAudioContext) window.webkitAudioContext = OverriddenAudioContext;
-      }
-    })();
-  </script>
+<style>
+* { box-sizing: border-box; }
 
-  <!-- 2. Runtimes originales de 8th Wall con sus atributos requeridos -->
-  <script crossorigin="anonymous" src="./external/runtime/runtime.js"></script>
-  <script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script>
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: system-ui, Arial, sans-serif;
+}
 
-  <style>
-    body, html { 
-      margin: 0; 
-      padding: 0; 
-      width: 100%; 
-      height: 100%; 
-      overflow: hidden; 
-      background: #000; 
-      font-family: system-ui, -apple-system, sans-serif; 
-    }
-    #ar-overlay {
-      position: absolute; 
-      top: 20px; 
-      left: 50%; 
-      transform: translateX(-50%); 
-      z-index: 10;
-      background: rgba(40, 46, 62, 0.85); 
-      color: #fff; 
-      padding: 12px 24px; 
-      border-radius: 50px;
-      font-size: 14px; 
-      font-weight: 600; 
-      text-align: center; 
-      pointer-events: none; 
-      border: 1px solid rgba(255,255,255,0.2);
-      transition: all 0.3s ease;
-    }
-  </style>
+#status {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  left: 4%;
+  width: 92%;
+  z-index: 99999;
+  padding: 13px;
+  border-radius: 16px;
+  background: rgba(12,39,46,.86);
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 650;
+  pointer-events: none;
+}
+
+#sound {
+  position: fixed;
+  bottom: max(15px, env(safe-area-inset-bottom));
+  left: 4%;
+  width: 92%;
+  z-index: 999999;
+  min-height: 48px;
+  padding: 12px;
+  border: 0;
+  border-radius: 14px;
+  background: #f7c954;
+  color: #1a2827;
+  font-weight: 800;
+  font-size: 14px;
+}
+</style>
+
+<script src="./external/runtime/runtime.js"></script>
+<script
+  src="./external/xr/xr.js"
+  async
+  crossorigin="anonymous"
+  data-preload-chunks="face, slam">
+</script>
 </head>
+
 <body>
 
-  <div id="ar-overlay">📷 Apunta la cámara a una de las tarjetas de Kusi</div>
+<div id="status">⏳ Preparando Kusi...</div>
 
-  <!-- 3. Carga del bundle de 8th Wall -->
-  <script src="./bundle.js"></script>
+<button id="sound" type="button">
+  🔊 Activar audio
+</button>
 
-  <!-- 4. Lógica de silencio/activación por detección de tarjeta -->
-  <script>
-    (function() {
-      let isTargetVisible = false;
-      const overlayText = document.getElementById('ar-overlay');
+<script>
+(() => {
+  "use strict";
 
-      const muteAll = () => {
-        if (window.__arAudioContexts) {
-          window.__arAudioContexts.forEach(ctx => { if (ctx.state === 'running') ctx.suspend().catch(() => {}); });
+  // ==========================================
+  // SOLO 5 CARTAS DE GRANJA
+  // ==========================================
+
+  const TARJETAS = new Set([
+    "conejo",
+    "gallo",
+    "pato",
+    "cerdo",
+    "oveja"
+  ]);
+
+  const status = document.getElementById("status");
+  const boton = document.getElementById("sound");
+
+  const audios = new Map();
+  const visibles = new Set();
+
+  const audio = new Audio();
+  audio.preload = "none";
+  audio.loop = false;
+
+  let sonidoActivo = false;
+  let audioActual = null;
+  let iniciado = false;
+  let preparada = false;
+
+  // ==========================================
+  // INTERFAZ
+  // ==========================================
+
+  function mostrar(texto) {
+    status.textContent = texto;
+    console.log("[KUSI]", texto);
+  }
+
+  function error(err) {
+    console.error("[KUSI ERROR]", err);
+    mostrar("⚠️ Error al preparar Kusi.");
+  }
+
+  // ==========================================
+  // AUDIO
+  // ==========================================
+
+  function detenerAudio() {
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+    audioActual = null;
+  }
+
+  async function reproducir(nombre) {
+    if (!sonidoActivo || !visibles.has(nombre) || !preparada) {
+      return;
+    }
+
+    const ruta = audios.get(nombre);
+    if (!ruta) return;
+
+    if (audioActual === nombre && !audio.paused) {
+      return;
+    }
+
+    detenerAudio();
+
+    audioActual = nombre;
+    audio.src = new URL(ruta, location.href).href;
+
+    try {
+      await audio.play();
+    } catch (err) {
+      console.warn("[KUSI] Audio:", err);
+    }
+  }
+
+  boton.addEventListener("click", async () => {
+    sonidoActivo = !sonidoActivo;
+
+    boton.textContent = sonidoActivo
+      ? "🔇 Silenciar audio"
+      : "🔊 Activar audio";
+
+    if (!sonidoActivo) {
+      detenerAudio();
+      return;
+    }
+
+    const nombre = [...visibles][0];
+
+    if (nombre) {
+      await reproducir(nombre);
+    } else {
+      // Habilitar audio mediante interacción.
+      audio.muted = true;
+
+      try {
+        audio.src =
+          "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+        await audio.play();
+      } catch (_) {}
+
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.muted = false;
+    }
+  });
+
+  // ==========================================
+  // BUSCAR TARJETA PADRE DE CADA MODELO
+  // ==========================================
+
+  function obtenerTarjeta(objeto, objetos) {
+    let actual = objeto;
+    const visitados = new Set();
+
+    while (actual) {
+      if (actual.imageTarget?.name) {
+        return actual.imageTarget.name;
+      }
+
+      if (!actual.parentId || visitados.has(actual.parentId)) {
+        break;
+      }
+
+      visitados.add(actual.parentId);
+      actual = objetos[actual.parentId];
+    }
+
+    return null;
+  }
+
+  // ==========================================
+  // CONSERVAR SOLO 5 MODELOS Y 5 AUDIOS
+  // ==========================================
+
+  function prepararEscena(escena) {
+    const objetos = escena?.objects || {};
+
+    let modelosConservados = 0;
+    let modelosExcluidos = 0;
+
+    audios.clear();
+
+    for (const objeto of Object.values(objetos)) {
+      const tarjeta = obtenerTarjeta(objeto, objetos);
+
+      // Mostrar el objetivo de las 5 cartas.
+      if (
+        objeto.imageTarget?.name &&
+        TARJETAS.has(objeto.imageTarget.name)
+      ) {
+        objeto.hidden = false;
+      }
+
+      // Conservar el componente GLB original.
+      if (objeto.gltfModel) {
+        if (TARJETAS.has(tarjeta)) {
+          modelosConservados++;
+        } else {
+          delete objeto.gltfModel;
+          modelosExcluidos++;
         }
-        document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; a.muted = true; });
-      };
+      }
 
-      const unmuteAll = () => {
-        if (window.__arAudioContexts) {
-          window.__arAudioContexts.forEach(ctx => { if (ctx.state === 'suspended') ctx.resume().catch(() => {}); });
+      // Mantener las rutas de audio,
+      // pero controlar la reproducción desde HTML.
+      if (objeto.audio) {
+        const ruta = objeto.audio.src?.asset;
+
+        if (TARJETAS.has(tarjeta) && ruta) {
+          audios.set(tarjeta, ruta);
         }
-        document.querySelectorAll('audio').forEach(a => { a.muted = false; a.currentTime = 0; a.play().catch(() => {}); });
-      };
 
-      // Bucle continuo para mantener silenciados los audios cuando no hay tarjeta
-      const monitor = () => {
-        if (!isTargetVisible) muteAll();
-        requestAnimationFrame(monitor);
-      };
-      requestAnimationFrame(monitor);
+        delete objeto.audio;
+      }
+    }
 
-      // Manejadores de eventos de las tarjetas
-      const onTargetFound = (e) => {
-        isTargetVisible = true;
-        const name = (e.detail && e.detail.name) ? e.detail.name : '';
-        if (overlayText) {
-          overlayText.innerText = name ? `✨ ¡Tarjeta ${name} detectada!` : "✨ ¡Tarjeta detectada!";
-          overlayText.style.background = "rgba(46, 125, 50, 0.9)";
+    console.log("[KUSI] Modelos:", modelosConservados);
+    console.log("[KUSI] Excluidos:", modelosExcluidos);
+    console.log("[KUSI] Audios:", audios.size);
+
+    if (modelosConservados !== 5 || audios.size !== 5) {
+      console.warn(
+        "[KUSI] Revisar asociaciones de modelos y audios."
+      );
+    }
+  }
+
+  // ==========================================
+  // RECONOCIMIENTO DE CARTAS
+  // ==========================================
+
+  function iniciar() {
+    if (iniciado) return;
+    iniciado = true;
+
+    XR8.addCameraPipelineModule({
+      name: "kusi-granja-cinco",
+
+      listeners: [
+        {
+          event: "reality.imageloading",
+          process: () => {
+            mostrar("⏳ Preparando reconocimiento...");
+          }
+        },
+        {
+          event: "reality.imagescanning",
+          process: () => {
+            if (!visibles.size && preparada) {
+              status.textContent = "📷 Apunta a una carta";
+            }
+          }
+        },
+        {
+          event: "reality.imagefound",
+          process: ({detail}) => {
+            const nombre = detail?.name;
+
+            if (!TARJETAS.has(nombre)) return;
+
+            visibles.add(nombre);
+
+            mostrar(
+              "✅ " +
+              nombre.charAt(0).toUpperCase() +
+              nombre.slice(1) +
+              " detectado"
+            );
+
+            reproducir(nombre);
+          }
+        },
+        {
+          event: "reality.imagelost",
+          process: ({detail}) => {
+            const nombre = detail?.name;
+
+            if (!TARJETAS.has(nombre)) return;
+
+            visibles.delete(nombre);
+
+            if (audioActual === nombre) {
+              detenerAudio();
+            }
+
+            if (!visibles.size) {
+              mostrar("📷 Apunta a una carta");
+            }
+          }
         }
-        unmuteAll();
-      };
+      ]
+    });
 
-      const onTargetLost = () => {
-        isTargetVisible = false;
-        if (overlayText) {
-          overlayText.innerText = "📷 Apunta la cámara a una de las tarjetas de Kusi";
-          overlayText.style.background = "rgba(40, 46, 62, 0.85)";
-        }
-        muteAll();
-      };
+    // ========================================
+    // INTERCEPTAR ESCENA ORIGINAL DE KUSI
+    // ========================================
 
-      const eventsFound = ['xr-image-target-found', 'targetfound', 'xrimagefound', 'xr:xrimagefound'];
-      const eventsLost = ['xr-image-target-lost', 'targetlost', 'xrimagelost', 'xr:xrimagelost'];
+    const initOriginal = window.ecs.application.init;
 
-      eventsFound.forEach(evt => window.addEventListener(evt, onTargetFound));
-      eventsLost.forEach(evt => window.addEventListener(evt, onTargetLost));
-    })();
-  </script>
+    window.ecs.application.init = function(escena, ...args) {
+      prepararEscena(escena);
+
+      const resultado = initOriginal.call(
+        this,
+        escena,
+        ...args
+      );
+
+      Promise.resolve(resultado)
+        .then(() => {
+          preparada = true;
+
+          if (!visibles.size) {
+            mostrar("📷 Apunta a una carta");
+          } else {
+            for (const nombre of visibles) {
+              reproducir(nombre);
+            }
+          }
+        })
+        .catch(error);
+
+      return resultado;
+    };
+
+    // Cargar bundle.js solamente cuando
+    // las librerías XR8 y ECS estén listas.
+    const script = document.createElement("script");
+    script.src = "./bundle.js";
+
+    script.onerror = () => {
+      error(new Error("No se pudo cargar bundle.js"));
+    };
+
+    document.body.appendChild(script);
+  }
+
+  // ==========================================
+  // ESPERAR XR8 Y ECS
+  // ==========================================
+
+  let intentos = 0;
+
+  const temporizador = setInterval(() => {
+    intentos++;
+
+    if (
+      window.XR8 &&
+      typeof XR8.run === "function" &&
+      typeof XR8.XrController?.configure === "function" &&
+      typeof window.ecs?.application?.init === "function"
+    ) {
+      clearInterval(temporizador);
+      iniciar();
+    } else if (intentos >= 120) {
+      clearInterval(temporizador);
+
+      error(
+        new Error("XR8/ECS no disponible.")
+      );
+    }
+  }, 500);
+
+})();
+</script>
+
 </body>
 </html>
